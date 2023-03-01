@@ -13,12 +13,12 @@ public class Order_detail {
     private int order_id;
     private int product_id;
     private int quantity;
-    private float order_price;
+    private int order_price;
 
     public Order_detail() {
     }
 
-    public Order_detail(int order_detail_id, int order_id, int product_id, int quantity, float order_price) {
+    public Order_detail(int order_detail_id, int order_id, int product_id, int quantity, int order_price) {
         this.order_detail_id = order_detail_id;
         this.order_id = order_id;
         this.product_id = product_id;
@@ -62,7 +62,7 @@ public class Order_detail {
         return order_price;
     }
 
-    public void setOrder_price(float order_price) {
+    public void setOrder_price(int order_price) {
         this.order_price = order_price;
     }
     

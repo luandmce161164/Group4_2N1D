@@ -14,17 +14,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Main CSS-->
-  <link rel="stylesheet" type="text/css" href="css/main.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}css/main.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
   <!-- or -->
-  <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}https://unpkg.com/boxicons@latest/css/boxicons.min.css">
 
   <!-- Font-icon css-->
   <link rel="stylesheet" type="text/css"
-    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    href="${pageContext.request.contextPath}https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="${pageContext.request.contextPath}https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 
 </head>
 
@@ -46,7 +46,7 @@
   <!-- Sidebar menu-->
   <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
   <aside class="app-sidebar">
-    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="images/logo-removebg-preview.png" width="50px"
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="${pageContext.request.contextPath}images/logo-removebg-preview.png" width="50px"
         alt="User Image">
       <div>        
         <p class="app-sidebar__user-designation">Hi! Welcome Back</p>
@@ -54,7 +54,7 @@
     </div>
     <hr>
     <ul class="app-menu">     
-      <li><a class="app-menu__item " href="index.jsp"><i class='app-menu__icon bx bx-tachometer'></i><span
+      <li><a class="app-menu__item " href="Admin_View.jsp"><i class='app-menu__icon bx bx-tachometer'></i><span
             class="app-menu__label">Dash Board</span></a></li>
       <li><a class="app-menu__item active" href="table-data-table.jsp"><i class='app-menu__icon bx bx-id-card'></i>
           <span class="app-menu__label">Customer Management</span></a></li>    
@@ -71,7 +71,7 @@
   <main class="app-content">
     <div class="app-title">
       <ul class="app-breadcrumb breadcrumb side">
-        <li class="breadcrumb-item active"><a href="#"><b>List of customer</b></a></li>
+          <li class="breadcrumb-item active"><a href="${pageContext.request.contextPath}table-data-table.jsp"><b>List of customer</b></a></li>
       </ul>
       <div id="clock"></div>
     </div>
@@ -84,13 +84,9 @@
             <div class="row element-button">
               <div class="col-sm-2">
 
-                <a class="btn btn-add btn-sm" href="form-add-khach-hang.jsp" title="Thêm"><i class="fas fa-plus"></i>
+                <a class="btn btn-add btn-sm" href="${pageContext.request.contextPath}form-add-khach-hang.jsp" title="Thêm"><i class="fas fa-plus"></i>
                   Add New Customer</a>
-              </div>              
-              <div class="col-sm-2">
-                <a class="btn btn-delete btn-sm" type="button" title="Xóa" onclick="myFunction(this)"><i
-                    class="fas fa-trash-alt"></i> Delete All </a>
-              </div>
+              </div>                           
             </div>
             <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0"
               id="sampleTable">
@@ -118,8 +114,7 @@
                   <td class="table-td-center"><button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
                       onclick="myFunction(this)"><i class="fas fa-trash-alt"></i>
                     </button>
-                    <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp"
-                      data-toggle="modal" data-target="#ModalUP"><i class="fas fa-edit"></i>
+                      <button href="form-edit-khach-hang.jsp" class="btn btn-primary btn-sm edit" type="button" title="Sửa"> <i class="fas fa-edit"></i>
                     </button>
                   </td>
                 </tr>
@@ -308,7 +303,7 @@
   <!-- Page specific javascripts-->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
   <!-- Data table plugin-->
-  <script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="js/plugins/jquery.dataTable.min.js"></script>
   <script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
   <script type="text/javascript">$('#sampleTable').DataTable();</script>
   <script>

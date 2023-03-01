@@ -1,6 +1,6 @@
 <%-- 
-    Document   : form-add-san-pham
-    Created on : Feb 19, 2023, 6:45:25 PM
+    Document   : form-edit-khach-hang
+    Created on : Feb 19, 2023, 6:45:13 PM
     Author     : User
 --%>
 
@@ -9,23 +9,22 @@
 <html lang="en">
 
     <head>
-        <title>Add new product</title>
+        <title>Edit Customer's Information</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Main CSS-->
         <link rel="stylesheet" type="text/css" href="css/main.css">
-        <!-- Font-icon css-->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
         <!-- or -->
         <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+        <!-- Font-icon css-->
+        <link rel="stylesheet" type="text/css"
+              href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="http://code.jquery.com/jquery.min.js" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
-        <link rel="stylesheet" type="text/css"
-              href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
-        <script src="http://code.jquery.com/jquery.min.js" type="text/javascript"></script>
         <script>
 
             function readURL(input, thumbimage) {
@@ -157,17 +156,17 @@
         <aside class="app-sidebar">
             <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="images/logo-removebg-preview.png" width="50px"
                                                 alt="User Image">
-                <div>        
+                <div>       
                     <p class="app-sidebar__user-designation">Hi! Welcome Back</p>
                 </div>
             </div>
             <hr>
             <ul class="app-menu">     
-                <li><a class="app-menu__item " href="Admin_View.jsp"><i class='app-menu__icon bx bx-tachometer'></i><span
+                <li><a class="app-menu__item" href="Admin_View.jsp"><i class='app-menu__icon bx bx-tachometer'></i><span
                             class="app-menu__label">Dash Board</span></a></li>
-                <li><a class="app-menu__item " href="table-data-table.jsp"><i class='app-menu__icon bx bx-id-card'></i>
+                <li><a class="app-menu__item active" href="table-data-table.jsp"><i class='app-menu__icon bx bx-id-card'></i>
                         <span class="app-menu__label">Customer Management</span></a></li>      
-                <li><a class="app-menu__item active" href="table-data-product.jsp"><i
+                <li><a class="app-menu__item " href="table-data-product.jsp"><i
                             class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Product Management</span></a>
                 </li>
                 <li><a class="app-menu__item" href="table-data-order.jsp"><i class='app-menu__icon bx bx-task'></i><span
@@ -180,113 +179,65 @@
         <main class="app-content">
             <div class="app-title">
                 <ul class="app-breadcrumb breadcrumb">
-                    <li class="breadcrumb-item"><a href="table-data-product.jsp">List of Product</a></li>
-                    <li class="breadcrumb-item"><a href="form-add-san-pham.jsp">Add new product</a></li>
+                    <li class="breadcrumb-item"><a href="table-data-table.jsp">List Of Customer</a></li>
+                    <li class="breadcrumb-item"><a href="form-edit-khach-hang.jsp">Edit Customer's Information</a></li>
                 </ul>
             </div>
             <div class="row">
                 <div class="col-md-12">
+
                     <div class="tile">
-                        <h3 class="tile-title">Add new product</h3>
-                        <div class="tile-body">                             
-                            <form class="row" action="/ProductController" method="post">   
-                                <div class="form-group col-md-3">
-                                    <label class="control-label">Product ID</label>
-                                    <input class="form-control" type="text" name="txtProductID" required>
+
+                        <h3 class="tile-title">Edit Customer's Information</h3> 
+                        <div class="tile-body">            
+                            <form class="row">
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Customer ID</label>
+                                    <input class="form-control" type="text" readonly>
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <label class="control-label">Product Name</label>
-                                    <input class="form-control" type="text" name="txtProductName" required>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Full Name</label>
+                                    <input class="form-control" type="text" required>
                                 </div>
-                                <div class="form-group  col-md-3">
-                                    <label class="control-label">Quantity</label>
-                                    <input class="form-control" type="number" name="txtQuantity" required>
-                                </div>                                
-                                <div class="form-group col-md-3">
-                                    <label for="exampleSelect1" class="control-label" name="txtCategory">Category</label>
-                                    <select class="form-control" id="exampleSelect1" required>
-                                        <option>-- Select Category --</option>
-                                        <option value="0">Shirts</option>
-                                        <option value="1">Pants</option>                                        
-                                    </select>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Email</label>
+                                    <input class="form-control" type="text" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Address</label>
+                                    <input class="form-control" type="text" required>
+                                </div>
+                                <div class="form-group  col-md-4">
+                                    <label class="control-label">Phone Number</label>
+                                    <input class="form-control" type="text" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Date Of Birth</label>
+                                    <input class="form-control" type="date">
                                 </div>              
                                 <div class="form-group col-md-3">
-                                    <label class="control-label" name="txtProductPrice">Product Price</label>
-                                    <input class="form-control" type="text" required>
-                                </div> 
-                                <div class="form-group col-md-3">
-                                    <label class="control-label"name="txtDate">Publish Date</label>
-                                    <input class="form-control" type="text" required>
-                                </div> 
-                                <div class="form-group col-md-3">
-                                    <label for="exampleSelect1" class="control-label" name="txtSize">Size</label>
-                                    <select class="form-control" id="exampleSelect1" required>
-                                        <option>-- Select Size --</option>
-                                        <option value="S">S</option>
-                                        <option value="M">M</option>                                        
-                                        <option value="L">L</option>                                        
-                                        <option value="XL">XL</option>                                        
-                                        <option value="XXL">XXL</option>                                        
+                                    <label class="control-label">Sex</label>
+                                    <select class="form-control" id="exampleSelect2" required>
+                                        <option>-- Select Sex --</option>
+                                        <option>Male</option>
+                                        <option>Female</option>
                                     </select>
-                                </div>      
-                                <div class="form-group col-md-12">
-                                    <label class="control-label">Image</label>
-                                    <div id="myfileupload">
-                                        <input type="file" id="uploadfile" name="txtImage" onchange="readURL(this);" />
-                                    </div>
-                                    <div id="thumbbox">
-                                        <img height="450" width="400" alt="Thumb image" id="thumbimage" style="display: none" />
-                                        <a class="removeimg" href="javascript:"></a>
-                                    </div>
-                                    <div id="boxchoice">
-                                        <a href="javascript:" class="Choicefile"><i class="fas fa-cloud-upload-alt"></i>Upload Image</a>
-                                        <p style="clear:both"></p>
-                                    </div>
-
                                 </div>
-                                <div class="form-group col-md-12">
-                                    <label class="control-label" name="txtDescription" required>Description</label>
-                                    <textarea class="form-control"  id="mota"></textarea>
-                                    <!--<script>CKEDITOR.replace('mota');</script>-->
-                                </div>
-
                         </div>
-                        <button class="btn btn-save" type="submit" value="Submit" name="btnInsert">Save</button>
-                        <a class="btn btn-cancel" href="table-data-product.jsp">Cancel</a>
-                        </form> 
-
+                        <button class="btn btn-save" type="button">Save</button>
+                        <a class="btn btn-cancel" href="table-data-table.jsp">Cancel</a>
                     </div>
-                    </main>
-                    <!--
-                    MODEL San Pham
-                    -->                    
 
+                    </main>
+
+                    <!-- Essential javascripts for application to work-->
                     <script src="js/jquery-3.2.1.min.js"></script>
                     <script src="js/popper.min.js"></script>
                     <script src="js/bootstrap.min.js"></script>
                     <script src="js/main.js"></script>
+                    <!-- The javascript plugin to display page loading on top-->
                     <script src="js/plugins/pace.min.js"></script>
-                    <script>
-                                            const inpFile = document.getElementById("inpFile");
-                                            const loadFile = document.getElementById("loadFile");
-                                            const previewContainer = document.getElementById("imagePreview");
-                                            const previewContainer = document.getElementById("imagePreview");
-                                            const previewImage = previewContainer.querySelector(".image-preview__image");
-                                            const previewDefaultText = previewContainer.querySelector(".image-preview__default-text");
-                                            inpFile.addEventListener("change", function () {
-                                                const file = this.files[0];
-                                                if (file) {
-                                                    const reader = new FileReader();
-                                                    previewDefaultText.style.display = "none";
-                                                    previewImage.style.display = "block";
-                                                    reader.addEventListener("load", function () {
-                                                        previewImage.setAttribute("src", this.result);
-                                                    });
-                                                    reader.readAsDataURL(file);
-                                                }
-                                            });
 
-                    </script>
                     </body>
 
                     </html>

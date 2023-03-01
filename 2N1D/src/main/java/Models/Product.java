@@ -11,36 +11,38 @@ import java.sql.Date;
  * @author User
  */
 public class Product {
-    private int product_id;
+    private String product_id;
     private String name;
-    private float product_price;
-    private String image;
+    private int product_price;
+    private String image;    
     private int category_id;
-    private Date publish_date;
-    private String size;
+    private Date publish_date;    
     private int status;
     private String detail_product;
+    private String size;
+    private int quantity;
 
     public Product() {
     }
 
-    public Product(int product_id, String name, float product_price, String image, int category_id, Date publish_date, String size, int status, String detail_product) {
+    public Product(String product_id, String name, int product_price, String image, int category_id, Date publish_date, int status, String detail_product, String size, int quantity) {
         this.product_id = product_id;
         this.name = name;
         this.product_price = product_price;
         this.image = image;
         this.category_id = category_id;
         this.publish_date = publish_date;
-        this.size = size;
         this.status = status;
         this.detail_product = detail_product;
+        this.size = size;
+        this.quantity = quantity;
     }
 
-    public int getProduct_id() {
+    public String getProduct_id() {
         return product_id;
     }
 
-    public void setProduct_id(int product_id) {
+    public void setProduct_id(String product_id) {
         this.product_id = product_id;
     }
 
@@ -52,11 +54,11 @@ public class Product {
         this.name = name;
     }
 
-    public float getProduct_price() {
+    public int getProduct_price() {
         return product_price;
     }
 
-    public void setProduct_price(float product_price) {
+    public void setProduct_price(int product_price) {
         this.product_price = product_price;
     }
 
@@ -84,14 +86,6 @@ public class Product {
         this.publish_date = publish_date;
     }
 
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
     public int getStatus() {
         return status;
     }
@@ -107,5 +101,23 @@ public class Product {
     public void setDetail_product(String detail_product) {
         this.detail_product = detail_product;
     }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    
     
 }

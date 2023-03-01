@@ -45,7 +45,7 @@
   <!-- Sidebar menu-->
   <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
   <aside class="app-sidebar">
-      <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="images/logo-removebg-preview.png" width="50px"
+      <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="${pageContext.request.contextPath}images/logo-removebg-preview.png" width="50px"
         alt="User Image">
       <div>
         
@@ -54,7 +54,7 @@
     </div>
     <hr>
     <ul class="app-menu">      
-      <li><a class="app-menu__item active" href="index.jsp"><i class='app-menu__icon bx bx-tachometer'></i><span
+      <li><a class="app-menu__item active" href="/Admin"><i class='app-menu__icon bx bx-tachometer'></i><span
             class="app-menu__label">Dash Board</span></a></li>
       <li><a class="app-menu__item " href="table-data-table.jsp"><i class='app-menu__icon bx bx-id-card'></i> <span
             class="app-menu__label">Customer Management</span></a></li>      
@@ -73,7 +73,7 @@
       <div class="col-md-12">
         <div class="app-title">
           <ul class="app-breadcrumb breadcrumb">
-            <li class="breadcrumb-item"><a href="#"><b>Dash Board</b></a></li>
+              <li class="breadcrumb-item"><a href="Admin_View.jsp"><b>Dash Board</b></a></li>
           </ul>
           <div id="clock"></div>
         </div>

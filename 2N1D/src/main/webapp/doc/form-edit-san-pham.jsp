@@ -1,5 +1,5 @@
 <%-- 
-    Document   : form-add-san-pham
+    Document   : form-edit-san-pham
     Created on : Feb 19, 2023, 6:45:25 PM
     Author     : User
 --%>
@@ -9,7 +9,7 @@
 <html lang="en">
 
     <head>
-        <title>Add new product</title>
+        <title>Edit Product's Information</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -180,81 +180,77 @@
         <main class="app-content">
             <div class="app-title">
                 <ul class="app-breadcrumb breadcrumb">
-                    <li class="breadcrumb-item"><a href="table-data-product.jsp">List of Product</a></li>
-                    <li class="breadcrumb-item"><a href="form-add-san-pham.jsp">Add new product</a></li>
+                    <li class="breadcrumb-item"><a href="table-data-product.jsp">List of Products</a></li>
+                    <li class="breadcrumb-item"><a href="form-edit-san-pham.jsp">Edit Product's Information</a></li>
                 </ul>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="tile">
-                        <h3 class="tile-title">Add new product</h3>
+                        <h3 class="tile-title">Edit Product's Information</h3>
                         <div class="tile-body">                             
-                            <form class="row" action="/ProductController" method="post">   
+                            <form class="row">
                                 <div class="form-group col-md-3">
-                                    <label class="control-label">Product ID</label>
-                                    <input class="form-control" type="text" name="txtProductID" required>
+                                    <label class="control-label">Product ID </label>
+                                    <input class="form-control" type="number" placeholder="" readonly>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label class="control-label">Product Name</label>
-                                    <input class="form-control" type="text" name="txtProductName" required>
+                                    <input class="form-control" type="text">
+                                </div>
+
+                                 <div class="form-group col-md-3">
+                                    <label class="control-label">Size</label>
+                                    <input class="form-control" type="text" readonly>
                                 </div>
                                 <div class="form-group  col-md-3">
                                     <label class="control-label">Quantity</label>
-                                    <input class="form-control" type="number" name="txtQuantity" required>
-                                </div>                                
+                                    <input class="form-control" type="number">
+                                </div>
+                                <div class="form-group col-md-3 ">
+                                    <label for="exampleSelect1" class="control-label">Status</label>
+                                    <select class="form-control" id="exampleSelect1">
+                                        <option>-- Select Status --</option>
+                                        <option>On Stock</option>
+                                        <option>Out Of Stock</option>
+                                    </select>
+                                </div>
                                 <div class="form-group col-md-3">
-                                    <label for="exampleSelect1" class="control-label" name="txtCategory">Category</label>
-                                    <select class="form-control" id="exampleSelect1" required>
+                                    <label for="exampleSelect1" class="control-label">Category</label>
+                                    <select class="form-control" id="exampleSelect1">
                                         <option>-- Select Category --</option>
-                                        <option value="0">Shirts</option>
-                                        <option value="1">Pants</option>                                        
+                                        <option>Shirts</option>
+                                        <option>Pants</option>                                        
                                     </select>
                                 </div>              
                                 <div class="form-group col-md-3">
-                                    <label class="control-label" name="txtProductPrice">Product Price</label>
-                                    <input class="form-control" type="text" required>
-                                </div> 
-                                <div class="form-group col-md-3">
-                                    <label class="control-label"name="txtDate">Publish Date</label>
-                                    <input class="form-control" type="text" required>
-                                </div> 
-                                <div class="form-group col-md-3">
-                                    <label for="exampleSelect1" class="control-label" name="txtSize">Size</label>
-                                    <select class="form-control" id="exampleSelect1" required>
-                                        <option>-- Select Size --</option>
-                                        <option value="S">S</option>
-                                        <option value="M">M</option>                                        
-                                        <option value="L">L</option>                                        
-                                        <option value="XL">XL</option>                                        
-                                        <option value="XXL">XXL</option>                                        
-                                    </select>
-                                </div>      
+                                    <label class="control-label">Product Price</label>
+                                    <input class="form-control" type="text">
+                                </div>             
                                 <div class="form-group col-md-12">
                                     <label class="control-label">Image</label>
                                     <div id="myfileupload">
-                                        <input type="file" id="uploadfile" name="txtImage" onchange="readURL(this);" />
+                                        <input type="file" id="uploadfile" name="ImageUpload" onchange="readURL(this);" />
                                     </div>
                                     <div id="thumbbox">
                                         <img height="450" width="400" alt="Thumb image" id="thumbimage" style="display: none" />
                                         <a class="removeimg" href="javascript:"></a>
                                     </div>
                                     <div id="boxchoice">
-                                        <a href="javascript:" class="Choicefile"><i class="fas fa-cloud-upload-alt"></i>Upload Image</a>
+                                        <a href="javascript:" class="Choicefile"><i class="fas fa-cloud-upload-alt"></i> Upload Image</a>
                                         <p style="clear:both"></p>
                                     </div>
 
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <label class="control-label" name="txtDescription" required>Description</label>
-                                    <textarea class="form-control"  id="mota"></textarea>
-                                    <!--<script>CKEDITOR.replace('mota');</script>-->
+                                    <label class="control-label">Description</label>
+                                    <textarea class="form-control" name="mota" id="mota"></textarea>
+<!--                                    <script>CKEDITOR.replace('mota');</script>-->
                                 </div>
 
                         </div>
-                        <button class="btn btn-save" type="submit" value="Submit" name="btnInsert">Save</button>
+                        <button class="btn btn-save" type="button">Save</button>
                         <a class="btn btn-cancel" href="table-data-product.jsp">Cancel</a>
-                        </form> 
-
                     </div>
                     </main>
                     <!--
@@ -267,24 +263,24 @@
                     <script src="js/main.js"></script>
                     <script src="js/plugins/pace.min.js"></script>
                     <script>
-                                            const inpFile = document.getElementById("inpFile");
-                                            const loadFile = document.getElementById("loadFile");
-                                            const previewContainer = document.getElementById("imagePreview");
-                                            const previewContainer = document.getElementById("imagePreview");
-                                            const previewImage = previewContainer.querySelector(".image-preview__image");
-                                            const previewDefaultText = previewContainer.querySelector(".image-preview__default-text");
-                                            inpFile.addEventListener("change", function () {
-                                                const file = this.files[0];
-                                                if (file) {
-                                                    const reader = new FileReader();
-                                                    previewDefaultText.style.display = "none";
-                                                    previewImage.style.display = "block";
-                                                    reader.addEventListener("load", function () {
-                                                        previewImage.setAttribute("src", this.result);
-                                                    });
-                                                    reader.readAsDataURL(file);
-                                                }
-                                            });
+                                        const inpFile = document.getElementById("inpFile");
+                                        const loadFile = document.getElementById("loadFile");
+                                        const previewContainer = document.getElementById("imagePreview");
+                                        const previewContainer = document.getElementById("imagePreview");
+                                        const previewImage = previewContainer.querySelector(".image-preview__image");
+                                        const previewDefaultText = previewContainer.querySelector(".image-preview__default-text");
+                                        inpFile.addEventListener("change", function () {
+                                            const file = this.files[0];
+                                            if (file) {
+                                                const reader = new FileReader();
+                                                previewDefaultText.style.display = "none";
+                                                previewImage.style.display = "block";
+                                                reader.addEventListener("load", function () {
+                                                    previewImage.setAttribute("src", this.result);
+                                                });
+                                                reader.readAsDataURL(file);
+                                            }
+                                        });
 
                     </script>
                     </body>

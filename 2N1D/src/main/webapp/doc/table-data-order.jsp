@@ -31,13 +31,9 @@
 <body onload="time()" class="app sidebar-mini rtl">
   <!-- Navbar-->
   <header class="app-header">
-    <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
-      aria-label="Hide Sidebar"></a>
     <!-- Navbar Right Menu-->
     <ul class="app-nav">
-
-
-      <!-- User Menu-->
+      <!-- SignOut-->
       <li><a class="app-nav__item" href="/index.jsp"><i class='bx bx-log-out bx-rotate-180'></i> </a>
 
       </li>
@@ -54,7 +50,7 @@
     </div>
     <hr>
     <ul class="app-menu">      
-      <li><a class="app-menu__item " href="index.jsp"><i class='app-menu__icon bx bx-tachometer'></i><span
+      <li><a class="app-menu__item " href="Admin_View.jsp"><i class='app-menu__icon bx bx-tachometer'></i><span
             class="app-menu__label">Dash Board</span></a></li>
       <li><a class="app-menu__item " href="table-data-table.jsp"><i class='app-menu__icon bx bx-id-card'></i>
           <span class="app-menu__label">Customer Management</span></a></li>    
@@ -72,7 +68,7 @@
     <main class="app-content">
       <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
-          <li class="breadcrumb-item active"><a href="#"><b>List of order</b></a></li>
+            <li class="breadcrumb-item active"><a href="table-data-order.jsp"><b>List of order</b></a></li>
         </ul>
         <div id="clock"></div>
       </div>
@@ -82,14 +78,9 @@
             <div class="tile-body">
               <div class="row element-button">
                 <div class="col-sm-2">
-  
                   <a class="btn btn-add btn-sm" href="form-add-don-hang.jsp" title="Thêm"><i class="fas fa-plus"></i>
                     Add New Order</a>
-                </div>            
-                <div class="col-sm-2">
-                  <a class="btn btn-delete btn-sm" type="button" title="Xóa" onclick="myFunction(this)"><i
-                      class="fas fa-trash-alt"></i> Delete All </a>
-                </div>
+                </div>                            
               </div>
               <table class="table table-hover table-bordered" id="sampleTable">
                 <thead>
@@ -190,7 +181,7 @@
   <!-- Page specific javascripts-->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
   <!-- Data table plugin-->
-  <script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="js/plugins/jquery.dataTable.min.js"></script>
   <script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
   <script type="text/javascript">$('#sampleTable').DataTable();</script>
   <script>
