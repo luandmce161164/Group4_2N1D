@@ -4,20 +4,21 @@
  */
 package com.controllers;
 
-import com.dao.AccountDAO;
-import com.models.Account;
+import jakarta.servlet.http.Cookie;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 /**
  *
  * @author DELL7250
  */
-public class LoginController extends HttpServlet {
+
+public class CartController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,7 +32,18 @@ public class LoginController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        try ( PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet CartController</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet CartController at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -46,7 +58,7 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
     }
 
     /**
@@ -60,34 +72,27 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (request.getParameter("btnSubmit") != null) {
-            String username = request.getParameter("username");
-            String password = request.getParameter("password");
-            AccountDAO dao = new AccountDAO();
-            Account a = dao.Login(username, password);
-            if (a == null) {
-
-                //   request.setAttribute("signInError", a);
-                response.sendRedirect("Login.jsp");
-//                request.getRequestDispatcher("Login.jsp").forward(request, response);
-            } else {
-                //  request.getRequestDispatcher("homecontrol").forward(request, response);
-//                HttpSession session = request.getSession();
-//                session.setAttribute("acc", a);
-//            session.setAttribute("idU", 1);
-//                System.out.println(a.getAccount_id());
-//                session.setMaxInactiveInterval(1000);
-                HttpSession session = request.getSession();
-                session.setAttribute("acc", a);
-                session.setMaxInactiveInterval(86400);
-                if (username.equals("admin") && password.equals("admin")) {
-                    response.sendRedirect("Admin.jsp");
-                } else {
-                    response.sendRedirect("Home.jsp");
-                }
-
+        String id = request.getParameter("id");
+        Cookie arr[] = request.getCookies();
+        String txt = "";
+        for (Cookie o : arr) {
+            if (o.getName().equals("id")) {
+                txt = txt + o.getValue();
+                o.setMaxAge(0);
+                response.addCookie(o);
             }
         }
+        if (id != null) {
+            if (txt.isEmpty()) {
+                txt = id;
+            } else {
+                txt = txt + "/" + id;
+            }
+        }
+        Cookie c = new Cookie("id", txt);
+        c.setMaxAge(60 * 60 * 24);
+        response.addCookie(c);
+        response.sendRedirect("ShowCart");
     }
 
     /**

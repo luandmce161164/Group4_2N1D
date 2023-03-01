@@ -4,20 +4,23 @@
  */
 package com.controllers;
 
-import com.dao.AccountDAO;
-import com.models.Account;
+import com.dao.ProductDAO;
+import com.models.Product;
+import jakarta.servlet.http.Cookie;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 /**
  *
  * @author DELL7250
  */
-public class LoginController extends HttpServlet {
+public class ShowCartController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,7 +34,38 @@ public class LoginController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        Cookie arr[] = request.getCookies();
+        List<Product> list = new ArrayList<>();
+        ProductDAO dao = new ProductDAO();
+        for (Cookie o : arr) {
+            if (o.getName().equals("id")) {
+                String txt[] = o.getValue().split("/");
+                for (String s : txt) {
+                    if (!s.isEmpty()) {
+                        list.add(dao.getProductCart(s));
+                    }
 
+                }
+            }
+        }
+        for (int i = 0; i < list.size(); i++) {
+            int count = 1;
+            for (int j = i + 1; j < list.size(); j++) {
+                if (list.get(i).getProduct_id()== list.get(j).getProduct_id()) {
+                    count++;
+                    list.remove(j);
+                    j--;
+                    list.get(i).setQuantity(count);
+                }
+            }
+        }
+        double total = 0;
+        for (Product o : list) {
+            total = total + o.getQuantity()* o.getProduct_price();
+        }
+        request.setAttribute("list", list);
+        request.setAttribute("total", total);
+        request.getRequestDispatcher("Cart.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -60,34 +94,7 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (request.getParameter("btnSubmit") != null) {
-            String username = request.getParameter("username");
-            String password = request.getParameter("password");
-            AccountDAO dao = new AccountDAO();
-            Account a = dao.Login(username, password);
-            if (a == null) {
-
-                //   request.setAttribute("signInError", a);
-                response.sendRedirect("Login.jsp");
-//                request.getRequestDispatcher("Login.jsp").forward(request, response);
-            } else {
-                //  request.getRequestDispatcher("homecontrol").forward(request, response);
-//                HttpSession session = request.getSession();
-//                session.setAttribute("acc", a);
-//            session.setAttribute("idU", 1);
-//                System.out.println(a.getAccount_id());
-//                session.setMaxInactiveInterval(1000);
-                HttpSession session = request.getSession();
-                session.setAttribute("acc", a);
-                session.setMaxInactiveInterval(86400);
-                if (username.equals("admin") && password.equals("admin")) {
-                    response.sendRedirect("Admin.jsp");
-                } else {
-                    response.sendRedirect("Home.jsp");
-                }
-
-            }
-        }
+        processRequest(request, response);
     }
 
     /**
