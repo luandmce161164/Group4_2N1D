@@ -14,7 +14,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Main CSS-->
-  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link rel="stylesheet" type="text/css" href="css/admin_css.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
   <!-- or -->
   <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
@@ -54,11 +54,11 @@
     </div>
     <hr>
     <ul class="app-menu">      
-      <li><a class="app-menu__item active" href="/Admin"><i class='app-menu__icon bx bx-tachometer'></i><span
+      <li><a class="app-menu__item active" href="<%= getServletContext().getContextPath()%>/"><i class='app-menu__icon bx bx-tachometer'></i><span
             class="app-menu__label">Dash Board</span></a></li>
-      <li><a class="app-menu__item " href="table-data-table.jsp"><i class='app-menu__icon bx bx-id-card'></i> <span
+      <li><a class="app-menu__item " href="<%= getServletContext().getContextPath()%>/Admin/Customer"><i class='app-menu__icon bx bx-id-card'></i> <span
             class="app-menu__label">Customer Management</span></a></li>      
-      <li><a class="app-menu__item" href="table-data-product.jsp"><i
+      <li><a class="app-menu__item" href="<%= getServletContext().getContextPath()%>/Admin/Product""><i
             class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Product Management</span></a>
       </li>
       <li><a class="app-menu__item" href="table-data-order.jsp"><i class='app-menu__icon bx bx-task'></i><span
@@ -73,7 +73,7 @@
       <div class="col-md-12">
         <div class="app-title">
           <ul class="app-breadcrumb breadcrumb">
-              <li class="breadcrumb-item"><a href="Admin_View.jsp"><b>Dash Board</b></a></li>
+              <li class="breadcrumb-item"><a href="<%= getServletContext().getContextPath()%>/"><b>Dash Board</b></a></li>
           </ul>
           <div id="clock"></div>
         </div>

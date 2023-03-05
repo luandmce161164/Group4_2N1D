@@ -12,6 +12,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.Date;
 
 /**
@@ -58,19 +59,38 @@ public class ProductController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-//        String path = request.getRequestURI();
-//        if (path.endsWith("/Admin")) {
-//            request.getRequestDispatcher("/doc/Admin_View.jsp").forward(request, response);
-//        } else {
-//            if (path.endsWith("/Admin/Product")) {
-//                request.getRequestDispatcher("/doc/table-data-product.jsp").forward(request, response);
-//            } else {
-//                if (path.endsWith("/Admin/Product/New")) {
-//                    request.getRequestDispatcher("/doc/form-add-san-pham.jsp").forward(request, response);
-//                }
-//            }
-//        }
+        String path = request.getRequestURI();
+        if (path.endsWith("/Admin/Product")) {
+            request.getRequestDispatcher("/table-data-product.jsp").forward(request, response);
+        } else {
+            if (path.endsWith("/Admin/Product/Add")) {
+                request.getRequestDispatcher("/form-add-san-pham.jsp").forward(request, response);
+            } else {
+                if (path.startsWith("/Admin/Product/Edit/")) {
+                    String[] s = path.split("/");
+
+                    String id = s[s.length - 1];
+                    ProductDAO dao = new ProductDAO();
+                    Product pt = dao.getProduct(id);
+                    if (pt == null) {
+                        response.sendRedirect("/Admin/Product");
+                    } else {
+                        HttpSession session = request.getSession();
+                        session.setAttribute("PT", pt);
+                        request.getRequestDispatcher("/form-edit-san-pham.jsp").forward(request, response);
+                    }
+                } else {
+                    if (path.startsWith("/Admin/Product/Delete")) {
+                        String[] s = path.split("/");
+
+                        String id = s[s.length - 1];
+                        ProductDAO dao = new ProductDAO();
+                        dao.delete(id);
+                        response.sendRedirect("/Admin/Product");
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -83,8 +103,8 @@ public class ProductController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {        
-        if (request.getParameter("btnInsert") != null) { 
+            throws ServletException, IOException {
+        if (request.getParameter("btnInsert") != null) {
             String pid = request.getParameter("txtProductID");
             String pname = request.getParameter("txtProductName");
             String quantity = request.getParameter("txtQuantity");
@@ -98,10 +118,26 @@ public class ProductController extends HttpServlet {
             ProductDAO dao = new ProductDAO();
             int count = dao.AddProduct(pt);
             if (count > 0) {
-                response.sendRedirect("/doc/table-data-table.jsp");
+                response.sendRedirect("/Admin/Product");
             } else {
-                response.sendRedirect("/doc/form-add-san-pham.jsp");
+                response.sendRedirect("/Admin/Product/Add");
             }
+        }
+        if (request.getParameter("btnUpdate") != null) {
+            String pid = request.getParameter("txtProductID");
+            String pname = request.getParameter("txtProductName");
+            String quantity = request.getParameter("txtQuantity");
+            String category = request.getParameter("txtCategory");
+            String pprice = request.getParameter("txtProductPrice");
+            String status = request.getParameter("txtStatus");
+            String pdate = request.getParameter("txtDate");
+            String size = request.getParameter("txtSize");
+            String image = request.getParameter("txtImage");
+            String description = request.getParameter("txtDescription");
+            Product pt = new Product(pid, pname, Integer.parseInt(pprice), image, Integer.parseInt(category), Date.valueOf(pdate), Integer.parseInt(status), description, size, Integer.parseInt(quantity));
+            ProductDAO dao = new ProductDAO();
+            dao.updateProduct(pt);
+            response.sendRedirect("/Admin/Product/Edit/");
         }
     }
 

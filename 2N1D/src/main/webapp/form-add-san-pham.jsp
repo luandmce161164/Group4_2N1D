@@ -14,7 +14,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Main CSS-->
-        <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/admin_css.css">
         <!-- Font-icon css-->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
         <!-- or -->
@@ -155,7 +155,7 @@
         <!-- Sidebar menu-->
         <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
         <aside class="app-sidebar">
-            <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="images/logo-removebg-preview.png" width="50px"
+            <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="${pageContext.request.contextPath}/images/logo-removebg-preview.png" width="50px"
                                                 alt="User Image">
                 <div>        
                     <p class="app-sidebar__user-designation">Hi! Welcome Back</p>
@@ -163,11 +163,11 @@
             </div>
             <hr>
             <ul class="app-menu">     
-                <li><a class="app-menu__item " href="Admin_View.jsp"><i class='app-menu__icon bx bx-tachometer'></i><span
+                <li><a class="app-menu__item " href="<%= getServletContext().getContextPath()%>/"><i class='app-menu__icon bx bx-tachometer'></i><span
                             class="app-menu__label">Dash Board</span></a></li>
-                <li><a class="app-menu__item " href="table-data-table.jsp"><i class='app-menu__icon bx bx-id-card'></i>
+                <li><a class="app-menu__item " href="<%= getServletContext().getContextPath()%>/Admin/Customer"><i class='app-menu__icon bx bx-id-card'></i>
                         <span class="app-menu__label">Customer Management</span></a></li>      
-                <li><a class="app-menu__item active" href="table-data-product.jsp"><i
+                <li><a class="app-menu__item active" href="<%= getServletContext().getContextPath()%>/Admin/Product"><i
                             class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Product Management</span></a>
                 </li>
                 <li><a class="app-menu__item" href="table-data-order.jsp"><i class='app-menu__icon bx bx-task'></i><span
@@ -180,8 +180,8 @@
         <main class="app-content">
             <div class="app-title">
                 <ul class="app-breadcrumb breadcrumb">
-                    <li class="breadcrumb-item"><a href="table-data-product.jsp">List of Product</a></li>
-                    <li class="breadcrumb-item"><a href="form-add-san-pham.jsp">Add new product</a></li>
+                    <li class="breadcrumb-item"><a href="<%= getServletContext().getContextPath()%>/Admin/Product">List of Product</a></li>
+                    <li class="breadcrumb-item"><a href="<%= getServletContext().getContextPath()%>/Admin/Product/Add">Add new product</a></li>
                 </ul>
             </div>
             <div class="row">
@@ -189,7 +189,7 @@
                     <div class="tile">
                         <h3 class="tile-title">Add new product</h3>
                         <div class="tile-body">                             
-                            <form class="row" action="/ProductController" method="post">   
+                            <form class="row" action="ProductController" method="post">   
                                 <div class="form-group col-md-3">
                                     <label class="control-label">Product ID</label>
                                     <input class="form-control" type="text" name="txtProductID" required>
@@ -203,24 +203,24 @@
                                     <input class="form-control" type="number" name="txtQuantity" required>
                                 </div>                                
                                 <div class="form-group col-md-3">
-                                    <label for="exampleSelect1" class="control-label" name="txtCategory">Category</label>
-                                    <select class="form-control" id="exampleSelect1" required>
+                                    <label for="exampleSelect1" class="control-label">Category</label>
+                                    <select class="form-control" id="exampleSelect1" name="txtCategory" required>
                                         <option>-- Select Category --</option>
                                         <option value="0">Shirts</option>
                                         <option value="1">Pants</option>                                        
                                     </select>
                                 </div>              
                                 <div class="form-group col-md-3">
-                                    <label class="control-label" name="txtProductPrice">Product Price</label>
-                                    <input class="form-control" type="text" required>
+                                    <label class="control-label">Product Price</label>
+                                    <input class="form-control" type="text" name="txtProductPrice" required>
                                 </div> 
                                 <div class="form-group col-md-3">
-                                    <label class="control-label"name="txtDate">Publish Date</label>
-                                    <input class="form-control" type="text" required>
+                                    <label class="control-label">Publish Date</label>
+                                    <input class="form-control" type="text" name="txtDate" required>
                                 </div> 
                                 <div class="form-group col-md-3">
-                                    <label for="exampleSelect1" class="control-label" name="txtSize">Size</label>
-                                    <select class="form-control" id="exampleSelect1" required>
+                                    <label for="exampleSelect1" class="control-label">Size</label>
+                                    <select class="form-control" id="exampleSelect1" name="txtSize" required>
                                         <option>-- Select Size --</option>
                                         <option value="S">S</option>
                                         <option value="M">M</option>                                        
@@ -245,14 +245,14 @@
 
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <label class="control-label" name="txtDescription" required>Description</label>
-                                    <textarea class="form-control"  id="mota"></textarea>
+                                    <label class="control-label">Description</label>
+                                    <textarea class="form-control"  id="mota" name="txtDescription" required></textarea>
                                     <!--<script>CKEDITOR.replace('mota');</script>-->
                                 </div>
 
                         </div>
                         <button class="btn btn-save" type="submit" value="Submit" name="btnInsert">Save</button>
-                        <a class="btn btn-cancel" href="table-data-product.jsp">Cancel</a>
+                        <a class="btn btn-cancel" href="<%= getServletContext().getContextPath()%>/Admin/Product">Cancel</a>
                         </form> 
 
                     </div>
@@ -261,11 +261,11 @@
                     MODEL San Pham
                     -->                    
 
-                    <script src="js/jquery-3.2.1.min.js"></script>
-                    <script src="js/popper.min.js"></script>
-                    <script src="js/bootstrap.min.js"></script>
-                    <script src="js/main.js"></script>
-                    <script src="js/plugins/pace.min.js"></script>
+                    <script src="${pageContext.request.contextPath}/js/jquery-3.2.1.min.js"></script>
+                    <script src="${pageContext.request.contextPath}/js/popper.min.js"></script>
+                    <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+                    <script src="${pageContext.request.contextPath}/js/main.js"></script>
+                    <script src="${pageContext.request.contextPath}/js/plugins/pace.min.js"></script>
                     <script>
                                             const inpFile = document.getElementById("inpFile");
                                             const loadFile = document.getElementById("loadFile");

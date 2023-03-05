@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author User
  */
-public class AdminController extends HttpServlet {
+public class CustomerController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,10 +34,10 @@ public class AdminController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AdminController</title>");            
+            out.println("<title>Servlet CustomerController</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AdminController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CustomerController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,7 +55,14 @@ public class AdminController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/Admin_View.jsp").forward(request, response);
+        String path = request.getRequestURI();
+        if (path.endsWith("/Admin/Customer")) {
+            request.getRequestDispatcher("/table-data-table.jsp").forward(request, response);
+        }else {
+            if (path.endsWith("/Admin/Customer/Add")) {
+                request.getRequestDispatcher("/form-add-khach-hang.jsp").forward(request, response);
+            }
+            }
     }
 
     /**
