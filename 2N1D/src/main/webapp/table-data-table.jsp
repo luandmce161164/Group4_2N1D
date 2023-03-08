@@ -63,9 +63,9 @@
                 <li><a class="app-menu__item" href="<%= getServletContext().getContextPath()%>/Admin/Product"><i
                             class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Product Management</span></a>
                 </li>
-                <li><a class="app-menu__item" href="table-data-order.jsp"><i class='app-menu__icon bx bx-task'></i><span
+                <li><a class="app-menu__item" href="<%= getServletContext().getContextPath()%>/Admin/Order"><i class='app-menu__icon bx bx-task'></i><span
                             class="app-menu__label">Order Management</span></a></li>   
-                <li><a class="app-menu__item" href="quan-ly-bao-cao.jsp"><i
+                <li><a class="app-menu__item" href="<%= getServletContext().getContextPath()%>/Admin/Report"><i
                             class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">View Sale Statistics</span></a>
                 </li>      
             </ul>
@@ -95,8 +95,8 @@
                                 <thead>
                                     <tr>                  
                                         <th>Account ID</th>
-                                        <th width="50">User Name</th>                  
-                                        <th width="150">Full Name</th>
+                                        <th>User Name</th>                  
+                                        <th>Full Name</th>
                                         <th>Gender</th>
                                         <th>Date Of Birth</th>
                                         <th>Email</th>                  
@@ -104,7 +104,7 @@
                                         <th>Password</th>                  
                                         <th>Status</th>                  
                                         <th>address</th>                  
-                                        <th width="100">Feature</th>
+                                        <th>Feature</th>
                                     </tr>
                                 </thead>
                                 <tbody>                             
@@ -114,13 +114,23 @@
                                         while (rs.next()) {
                                     %>   
                                     <tr>                                        
-                                        <td><%= rs.getString("account_id")%></td>
+                                        <td><%= rs.getInt("account_id")%></td>
                                         <td><%= rs.getString("username")%></td>
                                         <td><%= rs.getString("name")%></td>
-                                        <td><%= rs.getString("sex")%></td>
+                                        <%
+                                            if (rs.getInt("sex") == 0) {
+                                        %>
+                                        <td>Male</td>
+                                        <%
+                                        } else {
+                                        %>
+                                        <td>FeMale</td>
+                                        <%
+                                            }
+                                        %>
                                         <td><%= rs.getString("date_of_birth")%></td>
                                         <td><%= rs.getString("email")%></td>                                    
-                                        <td><%= rs.getInt("phone_number")%></td>                                                                                                         
+                                        <td><%= rs.getString("phone_number")%></td>                                                                                                         
                                         <td><%= rs.getString("password")%></td>                                      
 
                                         <%
@@ -135,11 +145,9 @@
                                             }
                                         %> 
                                         <td><%= rs.getString("address")%></td>              
-                                        <td class="table-td-center"><button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                                                            onclick="myFunction(this)"><i class="fas fa-trash-alt"></i>
-                                            </button>
-                                            <button href="form-edit-khach-hang.jsp" class="btn btn-primary btn-sm edit" type="button" title="Sửa"> <i class="fas fa-edit"></i>
-                                            </button>
+                                        <td> 
+                                            <a href="#" onclick="myFunction(this)"><button id="delete_<%= rs.getInt("account_id")%>" class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button></a>
+                                            <a href="<%= getServletContext().getContextPath()%>/Admin/Customer/Edit/<%= rs.getString("account_id")%>"<button href="form-edit-khach-hang.jsp" class="btn btn-primary btn-sm edit" type="button" title="Sửa"> <i class="fas fa-edit"></i></button></a>
                                         </td>
                                     </tr>    
                                     <%
@@ -168,46 +176,7 @@
         <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/jquery.dataTable.min.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/dataTables.bootstrap.min.js"></script>
         <script type="text/javascript">$('#sampleTable').DataTable();</script>
-        <script>
-            function deleteRow(r) {
-                var i = r.parentNode.parentNode.rowIndex;
-                document.getElementById("myTable").deleteRow(i);
-            }
-            jQuery(function () {
-                jQuery(".trash").click(function () {
-                    swal({
-                        title: "Cảnh báo",
-
-                        text: "Bạn có chắc chắn là muốn xóa khách hàng này?",
-                        buttons: ["Hủy bỏ", "Đồng ý"],
-                    })
-                            .then((willDelete) => {
-                                if (willDelete) {
-                                    swal("Đã xóa thành công.!", {
-
-                                    });
-                                }
-                            });
-                });
-            });
-            oTable = $('#sampleTable').dataTable();
-            $('#all').click(function (e) {
-                $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));
-                e.stopImmediatePropagation();
-            });
-
-            //EXCEL
-            // $(document).ready(function () {
-            //   $('#').DataTable({
-
-            //     dom: 'Bfrtip',
-            //     "buttons": [
-            //       'excel'
-            //     ]
-            //   });
-            // });
-
-
+        <script>            
             //Thời Gian
             function time() {
                 var today = new Date();
@@ -281,6 +250,34 @@
                 $("#ModalUP").modal({backdrop: false, keyboard: false})
             });
         </script>
+        <script>
+        function deleteRow(r) {
+            var i = r.parentNode.parentNode.rowIndex;
+            document.getElementById("sampleTable").deleteRow(i);
+        }
+        jQuery(function () {
+            jQuery(".trash").click(function () {
+                swal({
+                    title: "Cảnh báo",
+                    text: "Bạn có chắc chắn là muốn xóa sản phẩm này?",
+                    buttons: ["Hủy bỏ", "Đồng ý"]
+                })
+                        .then((willDelete) => {
+                            if (willDelete) {
+                                var account_id = this.id.split('_')[1];
+                                var urlDelete = "<%= getServletContext().getContextPath()%>/Admin/Customer/Delete/" + account_id;
+                                window.location.href = urlDelete;
+                                //swal("Đã xóa thành công.!", {});
+                            }
+                        });
+            });
+        });
+        oTable = $('#sampleTable').dataTable();
+        $('#all').click(function (e) {
+            $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));
+            e.stopImmediatePropagation();
+        });
+    </script>        
     </body>
 
 </html>

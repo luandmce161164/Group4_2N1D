@@ -4,6 +4,7 @@
     Author     : User
 --%>
 
+<%@page import="DAO.ProductDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +15,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Main CSS-->
-  <link rel="stylesheet" type="text/css" href="css/admin_css.css">
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/admin_css.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
   <!-- or -->
   <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
@@ -45,7 +46,7 @@
   <!-- Sidebar menu-->
   <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
   <aside class="app-sidebar">
-    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="images/logo-removebg-preview.png" width="50px"
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="${pageContext.request.contextPath}/images/logo-removebg-preview.png" width="50px"
         alt="User Image">
       <div>        
         <p class="app-sidebar__user-designation">Hi! Welcome Back</p>
@@ -53,16 +54,16 @@
     </div>
     <hr>
     <ul class="app-menu">      
-      <li><a class="app-menu__item " href="Admin_View.jsp"><i class='app-menu__icon bx bx-tachometer'></i><span
+      <li><a class="app-menu__item " href="<%= getServletContext().getContextPath()%>/"><i class='app-menu__icon bx bx-tachometer'></i><span
             class="app-menu__label">Dash Board</span></a></li>
-      <li><a class="app-menu__item " href="table-data-table.jsp"><i class='app-menu__icon bx bx-id-card'></i> <span
+      <li><a class="app-menu__item " href="<%= getServletContext().getContextPath()%>/Admin/Customer"><i class='app-menu__icon bx bx-id-card'></i> <span
             class="app-menu__label">Customer Management</span></a></li>      
-      <li><a class="app-menu__item" href="table-data-product.jsp"><i
+      <li><a class="app-menu__item" href="<%= getServletContext().getContextPath()%>/Admin/Product"><i
             class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Product Management</span></a>
       </li>
-      <li><a class="app-menu__item" href="table-data-order.jsp"><i class='app-menu__icon bx bx-task'></i><span
+      <li><a class="app-menu__item" href="<%= getServletContext().getContextPath()%>/Admin/Order"><i class='app-menu__icon bx bx-task'></i><span
             class="app-menu__label">Order Management</span></a></li>      
-      <li><a class="app-menu__item active" href="quan-ly-bao-cao.jsp"><i
+      <li><a class="app-menu__item active" href="<%= getServletContext().getContextPath()%>/Admin/Report"><i
             class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">View Sale Statistics</span></a>
       </li>      
     </ul>
@@ -72,53 +73,68 @@
       <div class="col-md-12">
         <div class="app-title">
           <ul class="app-breadcrumb breadcrumb">
-            <li class="breadcrumb-item"><a href="#"><b>View Sales Statistics    </b></a></li>
+            <li class="breadcrumb-item"><a href="<%= getServletContext().getContextPath()%>/Admin/Report"><b>View Sales Statistics</b></a></li>
           </ul>
           <div id="clock"></div>
         </div>
       </div>
     </div>
-        <div class="row">            
+        <div class="row"> 
+            <%
+                            ProductDAO p1 = new ProductDAO();
+                            int a = p1.getNumberOfProduct();
+                        %>
             <div class="col-md-6 col-lg-3">
                 <div class="widget-small info coloured-icon"><i class='icon bx bxs-purchase-tag-alt fa-3x' ></i>
                     <div class="info">
                         <h4>Total Products</h4>
-                        <p><b>8580 sản phẩm</b></p>
+                        <p><b><%= a%> Products</b></p>
                     </div>
                 </div>
             </div>
+                    <% 
+                        int a1 = p1.getNumberOfOrders();
+                    %>
             <div class="col-md-6 col-lg-3">
                 <div class="widget-small warning coloured-icon"><i class='icon fa-3x bx bxs-shopping-bag-alt'></i>
                     <div class="info">
                         <h4>Total Orders</h4>
-                        <p><b>457 đơn hàng</b></p>
+                        <p><b><%= a1%> Orders</b></p>
                     </div>
                 </div>
-            </div>            
+            </div>      
+                    <% 
+                        int a2 = p1.getTotalIncome();
+                    %>
             <div class="col-md-6 col-lg-3">
                 <div class="widget-small primary coloured-icon"><i class='icon fa-3x bx bxs-chart' ></i>
                     <div class="info">
                         <h4>Total Income</h4>
-                        <p><b>104.890.000 đ</b></p>
+                        <p><b><%= a2 %> đ</b></p>
                     </div>
                 </div>
             </div>   
+                    <% 
+                        int a3 = p1.getOutofStock();
+                    %>
             <div class="col-md-6 col-lg-3">
                 <div class="widget-small warning coloured-icon"><i class='icon fa-3x bx bxs-tag-x' ></i>
                     <div class="info">
                         <h4>Out of stock</h4>
-                        <p><b>1 sản phẩm</b></p>
+                        <p><b><%= a3%> Product</b></p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">                     
-            
+            <% 
+                        int a4 = p1.getTotalCancelOrder();
+                    %>
             <div class="col-md-6 col-lg-3">
                 <div class="widget-small danger coloured-icon"><i class='icon fa-3x bx bxs-receipt' ></i>
                     <div class="info">
                         <h4>order is canceled</h4>
-                        <p><b>2 đơn hàng</b></p>
+                        <p><b><%= a4 %> Orders</b></p>
                     </div>
                 </div>
             </div>
@@ -286,14 +302,14 @@
         </div>
     </main>
     <!-- Essential javascripts for application to work-->
-    <script src="js/jquery-3.2.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js"></script>
+    <script src="${pageContext.request.contextPath}/js/jquery-3.2.1.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/popper.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/main.js"></script>
     <!-- The javascript plugin to display page loading on top-->
-    <script src="js/plugins/pace.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/plugins/pace.min.js"></script>
     <!-- Page specific javascripts-->
-    <script type="text/javascript" src="js/plugins/chart.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/chart.js"></script>
     <script type="text/javascript">
     var data = {
       labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],

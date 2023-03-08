@@ -4,8 +4,9 @@
  */
 package Controller;
 
-import DAO.AccountDAO;
-import Models.Account;
+import DAO.ProductDAO;
+import Models.Order;
+import Models.Order_detail;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -19,7 +20,7 @@ import java.sql.Date;
  *
  * @author User
  */
-public class CustomerController extends HttpServlet {
+public class OrderController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -37,10 +38,10 @@ public class CustomerController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CustomerController</title>");
+            out.println("<title>Servlet OrderController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CustomerController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet OrderController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,37 +60,36 @@ public class CustomerController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String path = request.getRequestURI();
-        if (path.endsWith("/Admin/Customer")) {
-            request.getRequestDispatcher("/table-data-table.jsp").forward(request, response);
+        if (path.endsWith("/Admin/Order")) {
+            request.getRequestDispatcher("/table-data-order.jsp").forward(request, response);
         } else {
-            if (path.endsWith("/Admin/Customer/Add")) {
-                request.getRequestDispatcher("/form-add-khach-hang.jsp").forward(request, response);
+            if (path.endsWith("/Admin/Order/Add")) {
+                request.getRequestDispatcher("/form-add-don-hang.jsp").forward(request, response);
             } else {
-                if (path.startsWith("/Admin/Customer/Edit/")) {
+                if (path.startsWith("/Admin/Order/Edit/")) {
                     String[] s = path.split("/");
 
                     String id = s[s.length - 1];
-                    AccountDAO dao = new AccountDAO();
-                    Account ac = dao.getAccount(id);
-                    if (ac == null) {
-                        response.sendRedirect("/Admin/Customer");
+                    ProductDAO dao = new ProductDAO();
+                    Order or = dao.getOrder(id);
+                    if (or == null) {
+                        response.sendRedirect("/Admin/Order");
                     } else {
                         HttpSession session = request.getSession();
-                        session.setAttribute("AC", ac);
-                        request.getRequestDispatcher("/form-edit-khach-hang.jsp").forward(request, response);
+                        session.setAttribute("OR", or);
+                        request.getRequestDispatcher("/form-edit-don-hang.jsp").forward(request, response);
                     }
                 } else {
-                    if (path.startsWith("/Admin/Customer/Delete/")) {
+                    if (path.startsWith("/Admin/Order/Delete/")) {
                         String[] s = path.split("/");
 
                         String id = s[s.length - 1];
-                        AccountDAO dao = new AccountDAO();
-                        dao.DeleteCustomer(id);
-                        response.sendRedirect("/Admin/Customer");
+                        ProductDAO dao = new ProductDAO();
+                        dao.DeleteProduct(id);
+                        response.sendRedirect("/Admin/Order");
                     }
                 }
             }
-
         }
     }
 
@@ -104,39 +104,36 @@ public class CustomerController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        ProductDAO dao = new ProductDAO();
+        int n = dao.getMaxIDOrder();
+        int m = dao.getMaxIDOrderDetail();
+
         if (request.getParameter("btnInsert") != null) {
-            String cid = request.getParameter("txtCustomerID");
-            String cus = request.getParameter("txtUsername");
-            String cname = request.getParameter("txtCustomerName");
-            String cdob = request.getParameter("txtCustomerDOB");
-            String cemail = request.getParameter("txtCustomerEmail");
-            String cphone = request.getParameter("txtCustomerPhoneNumber");
-            String cpwd = request.getParameter("txtCustomerPassword");
-            String csex = request.getParameter("txtCustomerSex");
-            String caddress = request.getParameter("txtCustomerAddress");
-            Account ac = new Account(Integer.parseInt(cid), cus, cname, Integer.parseInt(csex), Date.valueOf(cdob), cemail, cphone, cpwd, 1, caddress);
-            AccountDAO dao = new AccountDAO();
-            int count = dao.AddNewCustomer(ac);
+            int oid = ++n;
+            int odid = ++m;
+            String oproduct = request.getParameter("txtProductID");
+            String ocus = request.getParameter("txtCustomerID");
+            String oquan = request.getParameter("txtQuantity");
+            String oprice = request.getParameter("txtTPrice");
+            String odate = request.getParameter("txtDate");
+            String ostatus = request.getParameter("txtStatus");
+            Order or = new Order(oid, Date.valueOf(odate), Integer.parseInt(ocus), Integer.parseInt(ostatus));
+            Order_detail orl = new Order_detail(odid, oid, oproduct, Integer.parseInt(oquan), Integer.parseInt(oprice));
+            int count = dao.AddOrder(or);
+
             if (count > 0) {
-                response.sendRedirect("/Admin/Customer");
+                count = 0;
+                if (dao.checkIdExist(oid) == 1) {
+                    count = dao.AddOrderDetail(orl);
+                    if (count > 0) {
+                        response.sendRedirect("/Admin/Order");
+                    } else {
+                        response.sendRedirect("/Admin/Order/Add");
+                    }
+                }
             } else {
-                response.sendRedirect("/Admin/Customer/Add");
+                response.sendRedirect("/Admin/Order/Add");
             }
-        }
-        if (request.getParameter("btnUpdate") != null) {
-            String cid = request.getParameter("txtCustomerID");
-            String cus = request.getParameter("txtUsername");
-            String cname = request.getParameter("txtCustomerName");
-            String cdob = request.getParameter("txtCustomerDOB");
-            String cemail = request.getParameter("txtCustomerEmail");
-            String cphone = request.getParameter("txtCustomerPhoneNumber");
-            String cpwd = request.getParameter("txtCustomerPassword");
-            String csex = request.getParameter("txtCustomerSex");
-            String caddress = request.getParameter("txtCustomerAddress");
-            Account ac = new Account(Integer.parseInt(cid), cus, cname, Integer.parseInt(csex), Date.valueOf(cdob), cemail, cphone, cpwd, 1, caddress);
-            AccountDAO dao = new AccountDAO();
-            dao.UpdateCustomer(ac);
-            response.sendRedirect("/Admin/Customer/Edit/");
         }
     }
 

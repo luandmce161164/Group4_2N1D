@@ -170,9 +170,9 @@
                 <li><a class="app-menu__item active" href="<%= getServletContext().getContextPath()%>/Admin/Product"><i
                             class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Product Management</span></a>
                 </li>
-                <li><a class="app-menu__item" href="table-data-order.jsp"><i class='app-menu__icon bx bx-task'></i><span
+                <li><a class="app-menu__item" href="<%= getServletContext().getContextPath()%>/Admin/Order"><i class='app-menu__icon bx bx-task'></i><span
                             class="app-menu__label">Order Management</span></a></li>      
-                <li><a class="app-menu__item" href="quan-ly-bao-cao.jsp"><i
+                <li><a class="app-menu__item" href="<%= getServletContext().getContextPath()%>/Admin/Report"><i
                             class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">View Sales Statistics</span></a>
                 </li>      
             </ul>

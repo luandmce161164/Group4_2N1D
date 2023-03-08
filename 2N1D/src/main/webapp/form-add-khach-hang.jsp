@@ -14,7 +14,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Main CSS-->
-        <link rel="stylesheet" type="text/css" href="css/admin_css.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/admin_css.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
         <!-- or -->
         <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
@@ -154,7 +154,7 @@
         <!-- Sidebar menu-->
         <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
         <aside class="app-sidebar">
-            <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="images/logo-removebg-preview.png" width="50px"
+            <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="${pageContext.request.contextPath}/images/logo-removebg-preview.png" width="50px"
                                                 alt="User Image">
                 <div>       
                     <p class="app-sidebar__user-designation">Hi! Welcome Back</p>
@@ -162,11 +162,11 @@
             </div>
             <hr>
             <ul class="app-menu">     
-                <li><a class="app-menu__item" href="Admin_View.jsp"><i class='app-menu__icon bx bx-tachometer'></i><span
+                <li><a class="app-menu__item" href="<%= getServletContext().getContextPath()%>/"><i class='app-menu__icon bx bx-tachometer'></i><span
                             class="app-menu__label">Dash Board</span></a></li>
-                <li><a class="app-menu__item active" href="table-data-table.jsp"><i class='app-menu__icon bx bx-id-card'></i>
+                <li><a class="app-menu__item active" href="<%= getServletContext().getContextPath()%>/Admin/Customer"><i class='app-menu__icon bx bx-id-card'></i>
                         <span class="app-menu__label">Customer Management</span></a></li>      
-                <li><a class="app-menu__item " href="table-data-product.jsp"><i
+                <li><a class="app-menu__item " href="<%= getServletContext().getContextPath()%>/Admin/Product"><i
                             class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Product Management</span></a>
                 </li>
                 <li><a class="app-menu__item" href="table-data-order.jsp"><i class='app-menu__icon bx bx-task'></i><span
@@ -179,8 +179,8 @@
         <main class="app-content">
             <div class="app-title">
                 <ul class="app-breadcrumb breadcrumb">
-                    <li class="breadcrumb-item"><a href="table-data-table.jsp">List Of Customer</a></li>
-                    <li class="breadcrumb-item"><a href="form-add-khach-hang.jsp">Add new customer</a></li>
+                    <li class="breadcrumb-item"><a href="<%= getServletContext().getContextPath()%>/Admin/Customer">List Of Customer</a></li>
+                    <li class="breadcrumb-item"><a href="<%= getServletContext().getContextPath()%>/Admin/Customer/Add">Add new customer</a></li>
                 </ul>
             </div>
             <div class="row">
@@ -190,53 +190,62 @@
 
                         <h3 class="tile-title">Add new customer</h3>
                         <div class="tile-body">            
-                            <form class="row">
+                           <form class="row" action="CustomerController" method="post">   
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Customer ID</label>
-                                    <input class="form-control" type="text">
+                                    <input class="form-control" type="text" name="txtCustomerID" required>
                                 </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Username</label>
+                                    <input class="form-control" type="text" name="txtUsername" required>
+                                </div>                               
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Full Name</label>
-                                    <input class="form-control" type="text" required>
+                                    <input class="form-control" type="text" name="txtCustomerName" required>
                                 </div>
+                               <div class="form-group col-md-4">
+                                    <label class="control-label">Date Of Birth</label>
+                                    <input class="form-control" type="text" name="txtCustomerDOB" required>
+                                </div>  
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Email</label>
-                                    <input class="form-control" type="text" required>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label class="control-label">Address</label>
-                                    <input class="form-control" type="text" required>
-                                </div>
+                                    <input class="form-control" type="text" name="txtCustomerEmail" required>
+                                </div>                                
                                 <div class="form-group  col-md-4">
                                     <label class="control-label">Phone Number</label>
-                                    <input class="form-control" type="text" required>
+                                    <input class="form-control" type="text" name="txtCustomerPhoneNumber" required>
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <label class="control-label">Date Of Birth</label>
-                                    <input class="form-control" type="date">
-                                </div>              
+                                <div class="form-group  col-md-4">
+                                    <label class="control-label">Password</label>
+                                    <input class="form-control" type="text" name="txtCustomerPassword" required>
+                                </div>                                            
                                 <div class="form-group col-md-3">
                                     <label class="control-label">Sex</label>
-                                    <select class="form-control" id="exampleSelect2" required>
+                                    <select class="form-control" id="exampleSelect2" required name="txtCustomerSex">
                                         <option>-- Select Sex --</option>
-                                        <option>Male</option>
-                                        <option>Female</option>
+                                        <option value="0">Male</option>
+                                        <option value="1">Female</option>
                                     </select>
                                 </div>
+                               <div class="form-group col-md-4">
+                                    <label class="control-label">Address</label>
+                                    <input class="form-control" type="text" name="txtCustomerAddress" required>
+                                </div>
                         </div>
-                        <button class="btn btn-save" type="button">Save</button>
-                        <a class="btn btn-cancel" href="/doc/table-data-table.jsp">Cancel</a>
+                        <button class="btn btn-save" type="submit" value="Submit" name="btnInsert">Save</button>
+                        <a class="btn btn-cancel" href="<%= getServletContext().getContextPath()%>/Admin/Customer">Cancel</a>
+                         </form> 
                     </div>
 
                     </main>
 
                     <!-- Essential javascripts for application to work-->
-                    <script src="js/jquery-3.2.1.min.js"></script>
-                    <script src="js/popper.min.js"></script>
-                    <script src="js/bootstrap.min.js"></script>
-                    <script src="js/main.js"></script>
+                    <script src="${pageContext.request.contextPath}/js/jquery-3.2.1.min.js"></script>
+                    <script src="${pageContext.request.contextPath}/js/popper.min.js"></script>
+                    <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+                    <script src="${pageContext.request.contextPath}/js/main.js"></script>
                     <!-- The javascript plugin to display page loading on top-->
-                    <script src="js/plugins/pace.min.js"></script>
+                    <script src="${pageContext.request.contextPath}/js/plugins/pace.min.js"></script>
 
                     </body>
 

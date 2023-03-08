@@ -14,26 +14,37 @@ public class Account {
        private int account_id; 
        private String username; 
        private String name; 
+       private int sex;
        private Date date_of_birth; 
        private String email; 
        private String phone_number; 
-       private String passsword;      
+       private String password;      
        private int status; 
+       
        private String address; 
 
     public Account() {
     }
 
-    public Account(int account_id, String username, String name, Date date_of_birth, String email, String phone_number, String passsword, int status, String address) {
+    public Account(int account_id, String username, String name, int sex, Date date_of_birth, String email, String phone_number, String password, int status, String address) {
         this.account_id = account_id;
         this.username = username;
         this.name = name;
+        this.sex = sex;
         this.date_of_birth = date_of_birth;
         this.email = email;
         this.phone_number = phone_number;
-        this.passsword = passsword;      
-        this.status = status;
+        this.password = password;
+        this.status = status;       
         this.address = address;
+    }
+
+    public int getSex() {
+        return sex;
+    }
+
+    public void setSex(int sex) {
+        this.sex = sex;
     }
 
     public int getAccount_id() {
@@ -84,12 +95,12 @@ public class Account {
         this.phone_number = phone_number;
     }
 
-    public String getPasssword() {
-        return passsword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasssword(String passsword) {
-        this.passsword = passsword;
+    public void setPassword(String password) {
+        this.password = password;
     }
    
     public int getStatus() {

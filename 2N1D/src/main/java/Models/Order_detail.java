@@ -11,14 +11,14 @@ package Models;
 public class Order_detail {
     private int order_detail_id;
     private int order_id;
-    private int product_id;
+    private String product_id;
     private int quantity;
     private int order_price;
 
     public Order_detail() {
     }
 
-    public Order_detail(int order_detail_id, int order_id, int product_id, int quantity, int order_price) {
+    public Order_detail(int order_detail_id, int order_id, String product_id, int quantity, int order_price) {
         this.order_detail_id = order_detail_id;
         this.order_id = order_id;
         this.product_id = product_id;
@@ -42,11 +42,11 @@ public class Order_detail {
         this.order_id = order_id;
     }
 
-    public int getProduct_id() {
+    public String getProduct_id() {
         return product_id;
     }
 
-    public void setProduct_id(int product_id) {
+    public void setProduct_id(String product_id) {
         this.product_id = product_id;
     }
 
@@ -58,7 +58,7 @@ public class Order_detail {
         this.quantity = quantity;
     }
 
-    public float getOrder_price() {
+    public int getOrder_price() {
         return order_price;
     }
 

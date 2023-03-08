@@ -80,13 +80,13 @@ public class ProductController extends HttpServlet {
                         request.getRequestDispatcher("/form-edit-san-pham.jsp").forward(request, response);
                     }
                 } else {
-                    if (path.startsWith("/Admin/Product/Delete")) {
+                    if (path.startsWith("/Admin/Product/Delete/")) {
                         String[] s = path.split("/");
 
                         String id = s[s.length - 1];
                         ProductDAO dao = new ProductDAO();
-                        dao.delete(id);
-                        response.sendRedirect("/Admin/Product");
+                        dao.DeleteOrder(id);
+                        response.sendRedirect("/Admin/Order");
                     }
                 }
             }
@@ -136,7 +136,7 @@ public class ProductController extends HttpServlet {
             String description = request.getParameter("txtDescription");
             Product pt = new Product(pid, pname, Integer.parseInt(pprice), image, Integer.parseInt(category), Date.valueOf(pdate), Integer.parseInt(status), description, size, Integer.parseInt(quantity));
             ProductDAO dao = new ProductDAO();
-            dao.updateProduct(pt);
+            dao.UpdateProduct(pt);
             response.sendRedirect("/Admin/Product/Edit/");
         }
     }

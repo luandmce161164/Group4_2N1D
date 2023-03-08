@@ -4,6 +4,7 @@
     Author     : User
 --%>
 
+<%@page import="Models.Account"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Main CSS-->
-        <link rel="stylesheet" type="text/css" href="css/admin_css.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/admin_css.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
         <!-- or -->
         <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
@@ -154,7 +155,7 @@
         <!-- Sidebar menu-->
         <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
         <aside class="app-sidebar">
-            <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="images/logo-removebg-preview.png" width="50px"
+            <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="${pageContext.request.contextPath}/images/logo-removebg-preview.png" width="50px"
                                                 alt="User Image">
                 <div>       
                     <p class="app-sidebar__user-designation">Hi! Welcome Back</p>
@@ -162,25 +163,28 @@
             </div>
             <hr>
             <ul class="app-menu">     
-                <li><a class="app-menu__item" href="Admin_View.jsp"><i class='app-menu__icon bx bx-tachometer'></i><span
+                <li><a class="app-menu__item" href="<%= getServletContext().getContextPath()%>/"><i class='app-menu__icon bx bx-tachometer'></i><span
                             class="app-menu__label">Dash Board</span></a></li>
-                <li><a class="app-menu__item active" href="table-data-table.jsp"><i class='app-menu__icon bx bx-id-card'></i>
+                <li><a class="app-menu__item active" href="<%= getServletContext().getContextPath()%>/Admin/Customer"><i class='app-menu__icon bx bx-id-card'></i>
                         <span class="app-menu__label">Customer Management</span></a></li>      
-                <li><a class="app-menu__item " href="table-data-product.jsp"><i
+                <li><a class="app-menu__item " href="<%= getServletContext().getContextPath()%>/Admin/Product"><i
                             class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Product Management</span></a>
                 </li>
-                <li><a class="app-menu__item" href="table-data-order.jsp"><i class='app-menu__icon bx bx-task'></i><span
+                <li><a class="app-menu__item" href="<%= getServletContext().getContextPath()%>/Admin/Order"><i class='app-menu__icon bx bx-task'></i><span
                             class="app-menu__label">Order Management</span></a></li>      
-                <li><a class="app-menu__item" href="quan-ly-bao-cao.jsp"><i
+                <li><a class="app-menu__item" href="<%= getServletContext().getContextPath()%>/Admin/Report"><i
                             class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">View Sales Statistics</span></a>
                 </li>      
             </ul>
         </aside>
         <main class="app-content">
             <div class="app-title">
+                <%
+                                Account ac = (Account) session.getAttribute("AC");
+                            %>
                 <ul class="app-breadcrumb breadcrumb">
-                    <li class="breadcrumb-item"><a href="table-data-table.jsp">List Of Customer</a></li>
-                    <li class="breadcrumb-item"><a href="form-edit-khach-hang.jsp">Edit Customer's Information</a></li>
+                    <li class="breadcrumb-item"><a href="<%= getServletContext().getContextPath()%>/Admin/Customer">List Of Customer</a></li>
+                    <li class="breadcrumb-item"><a href="<%= getServletContext().getContextPath()%>/Admin/Customer/Edit/<%= ac.getAccount_id()%>">Edit Customer's Information</a></li>
                 </ul>
             </div>
             <div class="row">
@@ -189,54 +193,79 @@
                     <div class="tile">
 
                         <h3 class="tile-title">Edit Customer's Information</h3> 
-                        <div class="tile-body">            
-                            <form class="row">
+                        <div class="tile-body"> 
+                            
+                            <form class="row" action="AccountController" method="post">
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Customer ID</label>
-                                    <input class="form-control" type="text" readonly>
+                                    <input class="form-control" type="text" name="txtCustomerID" value="<%= ac.getAccount_id()%>" readonly>
                                 </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Username</label>
+                                    <input class="form-control" type="text" name="txtUsername" value="<%= ac.getUsername()%>" readonly>
+                                </div>                               
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Full Name</label>
-                                    <input class="form-control" type="text" required>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label class="control-label">Email</label>
-                                    <input class="form-control" type="text" required>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label class="control-label">Address</label>
-                                    <input class="form-control" type="text" required>
-                                </div>
-                                <div class="form-group  col-md-4">
-                                    <label class="control-label">Phone Number</label>
-                                    <input class="form-control" type="text" required>
+                                    <input class="form-control" type="text" name="txtCustomerName" value="<%= ac.getName()%>">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Date Of Birth</label>
-                                    <input class="form-control" type="date">
-                                </div>              
+                                    <input class="form-control" type="text" name="txtCustomerDOB" value="<%= ac.getDate_of_birth()%>">
+                                </div>  
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Email</label>
+                                    <input class="form-control" type="text" name="txtCustomerEmail" value="<%= ac.getEmail()%>">
+                                </div>                                
+                                <div class="form-group  col-md-4">
+                                    <label class="control-label">Phone Number</label>
+                                    <input class="form-control" type="text" name="txtCustomerPhoneNumber" value="<%= ac.getPhone_number()%>">
+                                </div>
+                                <div class="form-group  col-md-4">
+                                    <label class="control-label">Password</label>
+                                    <input class="form-control" type="text" name="txtCustomerPassword" value="<%= ac.getPassword()%>">
+                                </div>                                            
                                 <div class="form-group col-md-3">
                                     <label class="control-label">Sex</label>
-                                    <select class="form-control" id="exampleSelect2" required>
+                                    <select class="form-control" id="exampleSelect2" name="txtCustomerSex">
                                         <option>-- Select Sex --</option>
-                                        <option>Male</option>
-                                        <option>Female</option>
+                                        <option value="0"<%= (ac.getSex() == 0 ? "selected" : "")%>>Male</option>
+                                        <option value="1"<%= (ac.getSex() == 1 ? "selected" : "")%>>Female</option>
                                     </select>
                                 </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Status</label>
+                                    <input class="form-control" type="text" readonly 
+                                           <%
+                                               if (ac.getStatus() == 0) {
+                                           %> 
+                                           value="Admin"
+                                           <%
+                                           } else {
+                                           %>
+                                           value="Customer"
+                                           <%
+                                               }
+                                           %>
+                                           >
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Address</label>
+                                    <input class="form-control" type="text" name="txtCustomerAddress" value="<%= ac.getAddress()%>">
+                                </div>
                         </div>
-                        <button class="btn btn-save" type="button">Save</button>
-                        <a class="btn btn-cancel" href="table-data-table.jsp">Cancel</a>
+                        <button class="btn btn-save" type="submit" value="submit" name="btnUpdate">Save</button>
+                        <a class="btn btn-cancel" href="<%= getServletContext().getContextPath()%>/Admin/Customer">Cancel</a>
+                        </form>
                     </div>
-
                     </main>
 
                     <!-- Essential javascripts for application to work-->
-                    <script src="js/jquery-3.2.1.min.js"></script>
-                    <script src="js/popper.min.js"></script>
-                    <script src="js/bootstrap.min.js"></script>
-                    <script src="js/main.js"></script>
+                    <script src="${pageContext.request.contextPath}/js/jquery-3.2.1.min.js"></script>
+                    <script src="${pageContext.request.contextPath}/js/popper.min.js"></script>
+                    <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+                    <script src="${pageContext.request.contextPath}/js/main.js"></script>
                     <!-- The javascript plugin to display page loading on top-->
-                    <script src="js/plugins/pace.min.js"></script>
+                    <script src="${pageContext.request.contextPath}/js/plugins/pace.min.js"></script>
 
                     </body>
 

@@ -62,9 +62,9 @@
             <li><a class="app-menu__item active" href="<%= getServletContext().getContextPath()%>/Admin/Product"><i
                         class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Product Management</span></a>
             </li>
-            <li><a class="app-menu__item" href="table-data-order.jsp"><i class='app-menu__icon bx bx-task'></i><span
+            <li><a class="app-menu__item" href="<%= getServletContext().getContextPath()%>/Admin/Order"><i class='app-menu__icon bx bx-task'></i><span
                         class="app-menu__label">Order Management</span></a></li>      
-            <li><a class="app-menu__item" href="quan-ly-bao-cao.jsp"><i
+            <li><a class="app-menu__item" href="<%= getServletContext().getContextPath()%>/Admin/Report"><i
                         class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">View Sales Statistics</span></a>
             </li>      
         </ul>
@@ -98,7 +98,7 @@
                                     <th>Publish Date</th>                                    
                                     <th>Status</th>
                                     <th>Description</th>
-                                     <th>Size</th>
+                                    <th>Size</th>
                                     <th>Quantity</th>                                   
                                     <th>Feature</th>
                                 </tr>
@@ -111,18 +111,18 @@
                                 %>   
                                 <tr>                                        
                                     <td><%= rs.getString("product_id")%></td>
-                                    <td><%= rs.getString("name")%></td>
+                                    <td><%= rs.getString("product_name")%></td>
                                     <td><%= rs.getInt("product_price")%></td>                                   
                                     <td><img src="${pageContext.request.contextPath}/<%= rs.getString("image")%>" alt="" width="100px"></td>                                    
                                     <td><%= rs.getString("category_name")%></td>                                    
                                     <td><%= rs.getDate("publish_date")%></td>
-                                    
+
                                     <%
                                         if (rs.getInt("status") == 1) {
                                     %>
                                     <td><span class="badge bg-success">On Stock</span></td>
-                                    <%                                    
-                                        } else {
+                                    <%
+                                    } else {
                                     %> 
                                     <td><span class="badge bg-danger">Out of Stock</span></td>
                                     <%
@@ -131,7 +131,7 @@
                                     <td><%= rs.getString("detail_product")%></td>
                                     <td><%= rs.getString("size")%></td>
                                     <td><%= rs.getInt("quantity")%></td>                                    
-                                    <td><a href="<%= getServletContext().getContextPath()%>/Admin/Product/Delete/<%= rs.getString("product_id")%>" onclick="myFunction(this)"><button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button> </a>                                        
+                                    <td><a href="#" onclick="myFunction(this)"><button id="delete_<%= rs.getString("product_id")%>" class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button> </a>
                                         <a href="<%= getServletContext().getContextPath()%>/Admin/Product/Edit/<%= rs.getString("product_id")%>"><button class="btn btn-primary btn-sm edit" type="button"><i class="fas fa-edit"></i></button> </a>
                                     </td>
                                 </tr>                                                                                                                                                                     
@@ -163,48 +163,47 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/jquery.dataTable.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/dataTables.bootstrap.min.js"></script>  
     <script type="text/javascript">
+                                        $('#sampleTable').DataTable();
+                                        //Thời Gian
+                                        function time() {
+                                            var today = new Date();
+                                            var weekday = new Array(7);
+                                            weekday[0] = "Sunday";
+                                            weekday[1] = "Monday";
+                                            weekday[2] = "Tuesday";
+                                            weekday[3] = "Wednesday";
+                                            weekday[4] = "Thursday";
+                                            weekday[5] = "Friday";
+                                            weekday[6] = "Saturday";
+                                            var day = weekday[today.getDay()];
+                                            var dd = today.getDate();
+                                            var mm = today.getMonth() + 1;
+                                            var yyyy = today.getFullYear();
+                                            var h = today.getHours();
+                                            var m = today.getMinutes();
+                                            var s = today.getSeconds();
+                                            m = checkTime(m);
+                                            s = checkTime(s);
+                                            nowTime = h + " : " + m + " : " + s;
+                                            if (dd < 10) {
+                                                dd = '0' + dd
+                                            }
+                                            if (mm < 10) {
+                                                mm = '0' + mm
+                                            }
+                                            today = day + ', ' + dd + '/' + mm + '/' + yyyy;
+                                            tmp = '<span class="date"> ' + today + ' - ' + nowTime +
+                                                    '</span>';
+                                            document.getElementById("clock").innerHTML = tmp;
+                                            clocktime = setTimeout("time()", "1000", "Javascript");
 
-        $('#sampleTable').DataTable();
-        //Thời Gian
-        function time() {
-            var today = new Date();
-            var weekday = new Array(7);
-            weekday[0] = "Sunday";
-            weekday[1] = "Monday";
-            weekday[2] = "Tuesday";
-            weekday[3] = "Wednesday";
-            weekday[4] = "Thursday";
-            weekday[5] = "Friday";
-            weekday[6] = "Saturday";
-            var day = weekday[today.getDay()];
-            var dd = today.getDate();
-            var mm = today.getMonth() + 1;
-            var yyyy = today.getFullYear();
-            var h = today.getHours();
-            var m = today.getMinutes();
-            var s = today.getSeconds();
-            m = checkTime(m);
-            s = checkTime(s);
-            nowTime = h + " : " + m + " : " + s;
-            if (dd < 10) {
-                dd = '0' + dd
-            }
-            if (mm < 10) {
-                mm = '0' + mm
-            }
-            today = day + ', ' + dd + '/' + mm + '/' + yyyy;
-            tmp = '<span class="date"> ' + today + ' - ' + nowTime +
-                    '</span>';
-            document.getElementById("clock").innerHTML = tmp;
-            clocktime = setTimeout("time()", "1000", "Javascript");
-
-            function checkTime(i) {
-                if (i < 10) {
-                    i = "0" + i;
-                }
-                return i;
-            }
-        }
+                                            function checkTime(i) {
+                                                if (i < 10) {
+                                                    i = "0" + i;
+                                                }
+                                                return i;
+                                            }
+                                        }
     </script>
     <script>
         function deleteRow(r) {
@@ -216,12 +215,14 @@
                 swal({
                     title: "Cảnh báo",
                     text: "Bạn có chắc chắn là muốn xóa sản phẩm này?",
-                    buttons: ["Hủy bỏ", "Đồng ý"],
+                    buttons: ["Hủy bỏ", "Đồng ý"]
                 })
                         .then((willDelete) => {
                             if (willDelete) {
-                                swal("Đã xóa thành công.!", {
-                                });
+                                var product_id = this.id.split('_')[1];
+                                var urlDelete = "<%= getServletContext().getContextPath()%>/Admin/Product/Delete/" + product_id;
+                                window.location.href = urlDelete;
+                                //swal("Đã xóa thành công.!", {});
                             }
                         });
             });

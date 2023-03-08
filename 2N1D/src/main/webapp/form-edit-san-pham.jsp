@@ -180,9 +180,12 @@
         </aside>
         <main class="app-content">
             <div class="app-title">
+                <%
+                                Product pt = (Product) session.getAttribute("PT");
+                            %>
                 <ul class="app-breadcrumb breadcrumb">
                     <li class="breadcrumb-item"><a href="<%= getServletContext().getContextPath()%>/Admin/Product">List of Products</a></li>
-                    <li class="breadcrumb-item"><a href="<%= getServletContext().getContextPath()%>/Admin/Product/Edit">Edit Product's Information</a></li>
+                    <li class="breadcrumb-item"><a href="<%= getServletContext().getContextPath()%>/Admin/Product/Edit/<%= pt.getProduct_id() %>">Edit Product's Information</a></li>
                 </ul>
             </div>
             <div class="row">
@@ -190,9 +193,7 @@
                     <div class="tile">
                         <h3 class="tile-title">Edit Product's Information</h3>
                         <div class="tile-body">      
-                            <%
-                                Product pt = (Product) session.getAttribute("PT");
-                            %>
+                            
                             <form class="row" method="post" action="ProductController">
                                 <div class="form-group col-md-3">
                                     <label class="control-label">Product ID</label>
@@ -257,8 +258,7 @@
                                 </div>
                                 <div class="form-group col-md-12">
                                     <label class="control-label">Description</label>
-                                    <textarea class="form-control"  id="mota" name="txtDescription"><%= pt.getDetail_product()%></textarea>
-                                    <!--<script>CKEDITOR.replace('mota');</script>-->
+                                    <textarea class="form-control"  id="mota" name="txtDescription"><%= pt.getDetail_product()%></textarea>                                   
                                 </div>
 
                         </div>
