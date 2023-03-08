@@ -4,6 +4,13 @@
     Author     : DELL7250
 --%>
 
+<%@page import="com.models.Account"%>
+<%@page import="com.dao.ProductDAO"%>
+<%@page import="com.models.Product"%>
+<%@page import="com.models.Cart"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -42,40 +49,59 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach items="${list}" var="o">
-                                            <tr>
-                                                <th scope="row">
-                                                    <div class="p-2">
-                                                        <img src="${o.image}" alt="" width="70" class="img-fluid rounded shadow-sm">
-                                                        <div class="ml-3 d-inline-block align-middle">
-                                                            <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block">${o.name}</a></h5><span class="text-muted font-weight-normal font-italic"></span>
+                      
+<!--                                              //  Account account = (Account) session.getAttribute("acc");
+                                                //List<Product> List = (ArrayList) session.getAttribute("list");
+                                                //double total = (double) session.getAttribute("list");
+                                                //List<Cart> List = new ArrayList<>();
+                                                //Product product = new Product();
+                                                //ProductDAO dao = new ProductDAO();
+                                                //dao.addCart(list.getProduct_id(), account.getAccount_id());
+                                                //List = dao.ListAllCart();
+                                                //List.add(new Cart((List.size()+1),account.getAccount_id(),list.getProduct_id(),1));
+//                                                 double total = 0;
+//////                                                for (Cart c : List) {
+//////                                                    if (c.getAccount_id() == account.getAccount_id()) {
+//////                                                        product = dao.getProductCart(c.getProduct_id());
+////                                                for (Product product : List) {
+////                                                    total = total + product.getQuantity() * product.getProduct_price();
+//                                                for (Product product : List) {
+//                                                    total = total + product.getQuantity() * product.getProduct_price();-->
+                                            <c:forEach items="${list}" var="o">
+                                                <tr>
+                                                    <th scope="row">
+                                                        <div class="p-2">
+                                                            <img src="${o.image}" alt="" width="70" class="img-fluid rounded shadow-sm">
+                                                            <div class="ml-3 d-inline-block align-middle">
+                                                                <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block">${o.name}</a></h5><span class="text-muted font-weight-normal font-italic"></span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </th>
-                                                <td class="align-middle"><strong>${o.product_price}</strong></td>
-                                                <td class="align-middle">
-                                                    <a href="sub?id=${o.product_id}"><button class="btnSub">-</button></a> <strong>${o.quantity}</strong>
-                                                    <a href="cart?id=${o.product_id}"><button class="btnAdd">+</button></a>
-                                                </td>
-                                                <td class="align-middle"><a href="delete?id=${product_id}" class="text-dark">
-                                                        <button type="button" class="btn btn-danger">Delete</button>
-                                                    </a>
-                                                </td>
-                                            </tr> 
-                                        </c:forEach>
-                                        </tbody>
-                                    </table>
+                                                    </th>
+                                                    <td class="align-middle"><strong>${o.product_price}</strong></td>
+                                                    <td class="align-middle"><strong>${o.product_price}</strong></td>
+                                                    <td class="align-middle">
+                                                        <a href="sub?id=${o.product_id}"><button class="btnSub">-</button></a> <strong>${o.quantity}</strong>
+                                                        <a href="cart?id=${o.product_id}"><button class="btnAdd">+</button></a>
+                                                    </td>
+                                                    <td class="align-middle"><a href="Cart/Delete/${o.product_id}" class="text-dark">
+                                                            <button type="button" class="btn btn-danger">Delete</button>
+                                                        </a>
+                                                    </td>
+                                                </tr>  
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- End -->
                                 </div>
-                                <!-- End -->
                             </div>
-                        </div>
                             <div class="col-lg-6">
                                 <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Total money</div>
                                 <div class="p-4">
                                     <ul class="list-unstyled mb-4">
-                                        <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total amount</strong><strong>${total}</strong></li>
+                                        <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total amount</strong><strong>${total}</stronboldg></li>
                                         <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total payment</strong>
-                                            <h5 class="font-weight-bold">${sum} VND</h5>
+                                            <h5 class="font-weight-">${total + 30000} VND</h5>
                                         </li>
                                     </ul><a href="Order.jsp" class="btn btn-dark rounded-pill py-2 btn-block">Buy</a>
                                 </div>

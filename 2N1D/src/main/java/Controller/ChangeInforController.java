@@ -4,14 +4,11 @@
  */
 package com.controllers;
 
-import com.dao.ProductDAO;
-import com.models.Cart;
-import com.models.Product;
-import jakarta.servlet.http.Cookie;
+import com.dao.AccountDAO;
+import com.models.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Date;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author DELL7250
  */
-public class ShowCartController extends HttpServlet {
+public class ChangeInforController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,7 +32,18 @@ public class ShowCartController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        try ( PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ChangeInforController</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet ChangeInforController at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -50,51 +58,7 @@ public class ShowCartController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//       String path = request.getRequestURI();
-//        if (path.endsWith("/Home/ShowCart")) {
-//        List<Cart> list = new ArrayList<>();
-//        Product product = new Product();
-        ProductDAO dao = new ProductDAO();
-//        list = dao.ListAllCart();
-//        double total = 0;
-//        for (Cart c : list) {
-//            product = dao.getProductCart(c.getProduct_id());
-//            total = total + product.getQuantity()* product.getProduct_price();
-//        }
-        Cookie arr[] = request.getCookies();
-        List<Product> list = new ArrayList<>();
-        for (Cookie o : arr) {
-            if (o.getName().equals("id")) {
-                String abc[] = o.getValue().split("/");
-                for (String s : abc) {
-                    if (!s.isEmpty()) {
-                        list.add(dao.getProductCart(s));
-                    }
-
-                }
-            }
-        }
-        for (int i = 0; i < list.size(); i++) {
-            int count = 1;
-            for (int j = i + 1; j < list.size(); j++) {
-                if (list.get(i).getProduct_id() == list.get(j).getProduct_id()) {
-                    count++;
-                    list.remove(j);
-                    j--;
-                    list.get(i).setQuantity(count);
-                }
-            }
-        }
-        double total = 0;
-        for (Product product : list) {
-            total = total + product.getQuantity() * product.getProduct_price();
-        }
-        request.setAttribute("list", list);
-        request.setAttribute("total", total);
-        response.sendRedirect("Home.jsp");
-//        request.setAttribute("list", list);
-//        request.setAttribute("total", total);
-//        request.getRequestDispatcher("Cart.jsp").forward(request, response);
+       
     }
 
     /**
@@ -108,7 +72,22 @@ public class ShowCartController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+         if (request.getParameter("btnUpdate") != null) {
+            String id = request.getParameter("id");
+            String name = request.getParameter("fullname");
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            String email = request.getParameter("email");
+            String sex = request.getParameter("rdoGT");
+            String date_of_birth = request.getParameter("date_of_birth");
+            String phone_number = request.getParameter("phone_number");
+            String address = request.getParameter("address");
+            
+            Account account = new Account(Integer.parseInt(id), username, name, Integer.parseInt(sex), Date.valueOf(date_of_birth),email, phone_number,password,1, address);
+            AccountDAO dao = new AccountDAO();
+            dao.update(account);
+            response.sendRedirect(request.getContextPath() + "Home.jsp"); //"view-personal-information.jsp");
+        }
     }
 
     /**

@@ -1,8 +1,9 @@
 <%-- 
     Document   : Home
     Created on : Feb 22, 2023, 6:24:43 PM
-    Author     : THANH HUYEN
+    Author     : DELL7250
 --%>
+<%@page import="com.models.Account"%>
 <%@page import="java.util.List"%>
 <%@page import="com.models.Product"%>
 <%@page import="com.dao.ProductDAO"%>
@@ -15,7 +16,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Home Page</title>
+        <title>JSP Page</title>
         <meta name="description" content="description">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Favicon -->
@@ -30,6 +31,7 @@
     </head>
     <body class="tt-Home 2n1d tt-Home-2n1d">
         <jsp:include page="Header.jsp"></jsp:include>
+            <!--End Mobile Menu-->
             <!--Body Content-->
             <div id="page-content">
                 <!--Home slider-->
@@ -85,35 +87,26 @@
                                             <!-- start product image -->
                                             <div class="product-image">
                                                 <!-- start product image -->
-                                                <a href="view_product.jsp?id= <%= product.getProduct_id()%>">
+                                                <a href="view_product.jsp?id=<%= product.getProduct_id()%>">
                                                     <!-- image -->
                                                     <img class="primary blur-up lazyload" data-src="<%= product.getImage()%>" src="<%= product.getImage()%>" alt="image" title="product">
                                                     <!-- End image -->
                                                     <!-- Hover image -->
                                                     <img class="hover blur-up lazyload" data-src="<%= product.getImage()%>" src="<%= product.getImage()%>" alt="image" title="product">
                                                     <!-- End hover image -->
-                                                    <%
-                                                        int random;
-                                                        random = (int) (Math.random() * 12 + 4);
-                                                        if (random % 3 == 0) {
-                                                    %>
                                                     <!-- product label -->
                                                     <div class="product-labels rectangular"><span class="lbl on-sale">Sale -10%</span> <span class="lbl pr-label1">new</span></div>
                                                     <!-- End product label -->
-                                                    <%
-                                                        }
-                                                    %>
                                                 </a>
                                                 <!-- end product image -->
 
                                                 <!-- countdown start --> 
                                                 <div class="saleTime desktop" data-countdown="2023/05/05"></div>
                                                 <!-- countdown end -->
-
-                                                <!-- Start product button -->
-                                                <form class="variants add" action="#" onclick="window.location.href = 'Cart?id=<%= product.getProduct_id()%>'" method="post">
-                                                    <button class="btn btn-addto-cart" type="button" tabHome="0">Add To Cart</button>
-                                                </form>
+                                                <!-- Start product button  action="CartController"  method="get" -->
+                                                <div class="variants add" >
+                                                    <a class="btn btn-addto-cart" type="button" tabHome="0" href="CartController?id=<%= product.getProduct_id()%>" >Add To Cart</a>
+                                                </div>
                                                 <!-- end product button -->
                                             </div>
                                             <!-- end product image -->
@@ -122,7 +115,7 @@
                                                 <!-- product name -->
                                                 <div class="product-name">
                                                     <a href="view_product.jsp?id=<%= product.getProduct_id()%>"><%= product.getName()%></a>
-                                                </div>
+                                                </div>                   
                                                 <!-- End product name -->
                                                 <!-- product price -->
                                                 <div class="product-price">
@@ -377,63 +370,63 @@
                 </div>
             </div>
             <!--End Store Feature-->
-        <!--End Body Content-->
+            <!--End Body Content-->
 
-        <!--Footer-->
-        <jsp:include page="Footer.jsp"></jsp:include>
-        <!--End Footer-->
-        <!--Scoll Top-->
-        <span id="site-scroll"><i class="icon anm anm-angle-up-r"></i></span>
-        <!--End Scoll Top-->
-        <!-- Including Jquery -->
-        <script src="assets/js/vendor/jquery-3.3.1.min.js"></script>
-        <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
-        <script src="assets/js/vendor/jquery.cookie.js"></script>
-        <script src="assets/js/vendor/wow.min.js"></script>
-        <!-- Including Javascript -->
-        <script src="assets/js/bootstrap.min.js"></script>
-        <script src="assets/js/plugins.js"></script>
-        <script src="assets/js/popper.min.js"></script>
-        <script src="assets/js/lazysizes.js"></script>
-        <script src="assets/js/main.js"></script>
-        <!--For Newsletter Popup-->
-        <script>
-                                                        jQuery(document).ready(function () {
-                                                            jQuery('.closepopup').on('click', function () {
-                                                                jQuery('#popup-container').fadeOut();
-                                                                jQuery('#modalOverly').fadeOut();
-                                                            });
-
-                                                            var visits = jQuery.cookie('visits') || 0;
-                                                            visits++;
-                                                            jQuery.cookie('visits', visits, {expires: 1, path: '/'});
-                                                            console.debug(jQuery.cookie('visits'));
-                                                            if (jQuery.cookie('visits') > 1) {
-                                                                jQuery('#modalOverly').hide();
-                                                                jQuery('#popup-container').hide();
-                                                            } else {
-                                                                var pageHeight = jQuery(document).height();
-                                                                jQuery('<div id="modalOverly"></div>').insertBefore('body');
-                                                                jQuery('#modalOverly').css("height", pageHeight);
-                                                                jQuery('#popup-container').show();
-                                                            }
-                                                            if (jQuery.cookie('noShowWelcome')) {
-                                                                jQuery('#popup-container').hide();
-                                                                jQuery('#active-popup').hide();
-                                                            }
+            <!--Footer-->
+            <jsp:include page="Footer.jsp"></jsp:include>
+            <!--End Footer-->
+            <!--Scoll Top-->
+            <span id="site-scroll"><i class="icon anm anm-angle-up-r"></i></span>
+            <!--End Scoll Top-->
+            <!-- Including Jquery -->
+            <script src="assets/js/vendor/jquery-3.3.1.min.js"></script>
+            <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+            <script src="assets/js/vendor/jquery.cookie.js"></script>
+            <script src="assets/js/vendor/wow.min.js"></script>
+            <!-- Including Javascript -->
+            <script src="assets/js/bootstrap.min.js"></script>
+            <script src="assets/js/plugins.js"></script>
+            <script src="assets/js/popper.min.js"></script>
+            <script src="assets/js/lazysizes.js"></script>
+            <script src="assets/js/main.js"></script>
+            <!--For Newsletter Popup-->
+            <script>
+                                                    jQuery(document).ready(function () {
+                                                        jQuery('.closepopup').on('click', function () {
+                                                            jQuery('#popup-container').fadeOut();
+                                                            jQuery('#modalOverly').fadeOut();
                                                         });
 
-                                                        jQuery(document).mouseup(function (e) {
-                                                            var container = jQuery('#popup-container');
-                                                            if (!container.is(e.target) && container.has(e.target).length === 0)
-                                                            {
-                                                                container.fadeOut();
-                                                                jQuery('#modalOverly').fadeIn(200);
-                                                                jQuery('#modalOverly').hide();
-                                                            }
-                                                        });
-        </script>
-        <!--End For Newsletter Popup-->
-    </div>
-</body>
+                                                        var visits = jQuery.cookie('visits') || 0;
+                                                        visits++;
+                                                        jQuery.cookie('visits', visits, {expires: 1, path: '/'});
+                                                        console.debug(jQuery.cookie('visits'));
+                                                        if (jQuery.cookie('visits') > 1) {
+                                                            jQuery('#modalOverly').hide();
+                                                            jQuery('#popup-container').hide();
+                                                        } else {
+                                                            var pageHeight = jQuery(document).height();
+                                                            jQuery('<div id="modalOverly"></div>').insertBefore('body');
+                                                            jQuery('#modalOverly').css("height", pageHeight);
+                                                            jQuery('#popup-container').show();
+                                                        }
+                                                        if (jQuery.cookie('noShowWelcome')) {
+                                                            jQuery('#popup-container').hide();
+                                                            jQuery('#active-popup').hide();
+                                                        }
+                                                    });
+
+                                                    jQuery(document).mouseup(function (e) {
+                                                        var container = jQuery('#popup-container');
+                                                        if (!container.is(e.target) && container.has(e.target).length === 0)
+                                                        {
+                                                            container.fadeOut();
+                                                            jQuery('#modalOverly').fadeIn(200);
+                                                            jQuery('#modalOverly').hide();
+                                                        }
+                                                    });
+            </script>
+            <!--End For Newsletter Popup-->
+        </div>
+    </body>
 </html>

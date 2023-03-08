@@ -4,20 +4,23 @@
  */
 package com.controllers;
 
-import jakarta.servlet.http.Cookie;
+import com.dao.ProductDAO;
+import com.models.Account;
+import com.models.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author DELL7250
  */
-
 public class CartController extends HttpServlet {
 
     /**
@@ -31,19 +34,7 @@ public class CartController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CartController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CartController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -58,7 +49,34 @@ public class CartController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        if (request.getParameter("id") != null) {
+//            String id = request.getParameter("id");
+//            Account account = (Account) request.getAttribute("acc");
+            ProductDAO dao = new ProductDAO();
+//            dao.addCart(id, account.getAccount_id());
+//            response.sendRedirect("/Home.jsp");
+            String id = request.getParameter("id");
+            Cookie arr[] = request.getCookies();
+            String txt = "";
+            for (Cookie o : arr) {
+                if (o.getName().equals("id")) {
+                    txt = txt + o.getValue();
+                    o.setMaxAge(0);
+                    response.addCookie(o);
+                }
+            }
+            if (id != null) {
+                if (txt.isEmpty()) {
+                    txt = id;
+                } else {
+                    txt = txt + "/" + id;
+                }
+            }
+            Cookie c = new Cookie("id", txt);
+            c.setMaxAge(60 * 60 * 24);
+            response.addCookie(c);
+            response.sendRedirect("ShowCart");
+        }
     }
 
     /**
@@ -72,27 +90,7 @@ public class CartController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("id");
-        Cookie arr[] = request.getCookies();
-        String txt = "";
-        for (Cookie o : arr) {
-            if (o.getName().equals("id")) {
-                txt = txt + o.getValue();
-                o.setMaxAge(0);
-                response.addCookie(o);
-            }
-        }
-        if (id != null) {
-            if (txt.isEmpty()) {
-                txt = id;
-            } else {
-                txt = txt + "/" + id;
-            }
-        }
-        Cookie c = new Cookie("id", txt);
-        c.setMaxAge(60 * 60 * 24);
-        response.addCookie(c);
-        response.sendRedirect("ShowCart");
+        processRequest(request, response);
     }
 
     /**

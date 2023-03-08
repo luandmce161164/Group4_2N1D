@@ -4,6 +4,7 @@
  */
 package com.controllers;
 
+import com.dao.AccountDAO;
 import com.dao.ProductDAO;
 import com.models.Category;
 import com.models.Product;
@@ -34,9 +35,10 @@ public class HomeController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
          ProductDAO dao = new ProductDAO();
-        List<Product> list = dao.ListAllProduct();
+        List<Product> listP = dao.ListAllProduct();
         List<Category> listC = dao.ListAllCatelogy();
-        request.setAttribute("ListP", list);
+        
+        request.setAttribute("ListP", listP);
         request.setAttribute("ListCC", listC);
         
         request.getRequestDispatcher("Home.jsp").forward(request, response);

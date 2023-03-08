@@ -51,16 +51,15 @@
                             <ul class="customer-links list-inline">
                                 <%
                                     Account account = (Account) session.getAttribute("acc");
-                                    if (account != null) {
-
+                                    if (account == null) {
                                 %>
-                                <li><a>Hello <%= account.getUsername()%></a></li>
-                                <li><a href="LogoutController">Sign out</a></li>
+                                <li><a href="Login.jsp">Login</a></li>
+                                <li><a href="SignUp.jsp">Create Account</a></li>
                                     <%
                                     } else {
                                     %>
-                                <li><a href="Login.jsp">Login</a></li>
-                                <li><a href="SignUp.jsp">Create Account</a></li>
+                                <li><a href="view-personal-information.jsp">Hello <%= account.getUsername()%></a></li>
+                                <li><a href="LogoutController">Sign out</a></li>
                                     <%
                                         }
                                     %>
@@ -103,12 +102,6 @@
                                             <li><a href="product-pants.jsp" class="site-nav">Pants</a></li>
                                         </ul>
                                     </li>
-                                    <!--                                    <li class="lvl1 parent dropdown"><a href="discount.jsp">Discount <i class="anm anm-angle-down-l"></i></a>
-                                                                                                                                                     <ul class="dropdown">
-                                                                                                                                                                   <li><a href="about-us.jsp" class="site-nav">About Us </a></li>
-                                                                                                                                                                   <li><a href="contact-us.jsp" class="site-nav">Contact Us</a></li>
-                                                                                                                                                            </ul>
-                                                                        </li>-->
                                     <li class="lvl1 parent dropdown"><a href="#.jsp">Customer Care <i class="anm anm-angle-down-l"></i></a>
                                         <ul class="dropdown">
                                             <li><a href="care1.jsp" class="site-nav">chinh sach doi tra va bao hanh </a></li>
@@ -132,73 +125,10 @@
                         <!--end Mobile Logo-->
                         <div class="col-4 col-sm-3 col-md-3 col-lg-2">
                             <div class="site-cart">
-                                <a href="#;" class="site-header__cart" title="Cart">
+                                <a href="Cart.jsp"  title="Cart">
                                     <i class="icon anm anm-bag-l"></i>
-                                    <span id="CartCount" class="site-header__cart-count" data-cart-render="item_count">0</span> <!-- so tren gio hang -->
+                                    <span id="CartCount" class="site-header__cart-count" data-cart-render="item_count">+</span> <!-- so tren gio hang -->
                                 </a>
-                                <!--Minicart Popup-->
-                                <!--                                <div id="header-cart" class="block block-cart">
-                                                                    <ul class="mini-products-list">
-                                                                        <li class="item">
-                                                                            <a class="product-image" href="#">
-                                                                                <img src="assets/images/product-images/ao1.jpg" alt="ao so 1" title="" />
-                                                                            </a>
-                                                                            <div class="product-details">
-                                                                                <a href="#" class="remove"><i class="anm anm-times-l" aria-hidden="true"></i></a>
-                                                                                <a href="#" class="edit-i remove"><i class="anm anm-edit" aria-hidden="true"></i></a>
-                                                                                <a class="pName" href="cart.jsp">Sleeve Kimono Dress</a>
-                                                                                <div class="variant-cart">Black / XL</div>
-                                                                                <div class="wrapQtyBtn">
-                                                                                    <div class="qtyField">
-                                                                                        <span class="label">Qty:</span>
-                                                                                        <a class="qtyBtn minus" href="javascript:void(0);"><i class="fa anm anm-minus-r" aria-hidden="true"></i></a>
-                                                                                        <input type="text" id="Quantity" name="quantity" value="1" class="product-form__input qty">
-                                                                                        <a class="qtyBtn plus" href="javascript:void(0);"><i class="fa anm anm-plus-r" aria-hidden="true"></i></a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="priceRow">
-                                                                                    <div class="product-price">
-                                                                                        <span class="money">999.000 VND</span>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </li>
-                                                                        <li class="item">
-                                                                            <a class="product-image" href="#">
-                                                                                <img src="assets/images/product-images/pants1.jpg" alt="quan so 1 / Small" title="" />
-                                                                            </a>
-                                                                            <div class="product-details">
-                                                                                <a href="#" class="remove"><i class="anm anm-times-l" aria-hidden="true"></i></a>
-                                                                                <a href="#" class="edit-i remove"><i class="anm anm-edit" aria-hidden="true"></i></a>
-                                                                                <a class="pName" href="cart.jsp">Elastic Waist Dress</a>
-                                                                                <div class="variant-cart">Gray / XXL</div>
-                                                                                <div class="wrapQtyBtn">
-                                                                                    <div class="qtyField">
-                                                                                        <span class="label">Qty:</span>
-                                                                                        <a class="qtyBtn minus" href="javascript:void(0);"><i class="fa anm anm-minus-r" aria-hidden="true"></i></a>
-                                                                                        <input type="text" id="Quantity" name="quantity" value="1" class="product-form__input qty">
-                                                                                        <a class="qtyBtn plus" href="javascript:void(0);"><i class="fa anm anm-plus-r" aria-hidden="true"></i></a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="priceRow">
-                                                                                    <div class="product-price">
-                                                                                        <span class="money">999.999 VND </span>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                    <div class="total">
-                                                                        <div class="total-in">
-                                                                            <span class="label">Cart Subtotal:</span><span class="product-price"><span class="money">2.000.000 VND</span></span>
-                                                                        </div>
-                                                                        <div class="buttonSet text-center">
-                                                                            <a href="cart.jsp" class="btn btn-secondary btn--small">View Cart</a>
-                                                                            <a href="checkout.jsp" class="btn btn-secondary btn--small">Checkout</a>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>-->
-                                <!--EndMinicart Popup-->
                             </div>
                             <div class="site-header__search">
                                 <button type="button" class="search-trigger"><i class="icon anm anm-search-l"></i></button>
