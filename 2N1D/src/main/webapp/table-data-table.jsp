@@ -147,7 +147,7 @@
                                         <td><%= rs.getString("address")%></td>              
                                         <td> 
                                             <a href="#" onclick="myFunction(this)"><button id="delete_<%= rs.getInt("account_id")%>" class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button></a>
-                                            <a href="<%= getServletContext().getContextPath()%>/Admin/Customer/Edit/<%= rs.getString("account_id")%>"<button href="form-edit-khach-hang.jsp" class="btn btn-primary btn-sm edit" type="button" title="Sửa"> <i class="fas fa-edit"></i></button></a>
+                                            <a href="<%= getServletContext().getContextPath()%>/Admin/Customer/Edit/<%= rs.getInt("account_id")%>"<button href="form-edit-khach-hang.jsp" class="btn btn-primary btn-sm edit" type="button" title="Sửa"> <i class="fas fa-edit"></i></button></a>
                                         </td>
                                     </tr>    
                                     <%

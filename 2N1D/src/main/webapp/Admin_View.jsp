@@ -4,6 +4,7 @@
     Author     : User
 --%>
 
+<%@page import="java.sql.ResultSet"%>
 <%@page import="DAO.AccountDAO"%>
 <%@page import="DAO.ProductDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -111,20 +112,20 @@
                             </div>
                         </div>
                         <!-- col-6 -->
-                        <% 
+                        <%
                             int or = p1.getNumberOfOrders();
                         %>
                         <div class="col-md-6">
                             <div class="widget-small warning coloured-icon"><i class='icon bx bxs-shopping-bags fa-3x'></i>
                                 <div class="info">
                                     <h4>Total orders</h4>
-                                    <p><b><%= or %> Orders</b></p>
+                                    <p><b><%= or%> Orders</b></p>
                                     <p class="info-tong">Total sales invoices for the month</p>
                                 </div>
                             </div>
                         </div>
                         <!-- col-6 -->
-                        <% 
+                        <%
                             int o = p1.getOutofStock();
                         %>
                         <div class="col-md-6">
@@ -151,38 +152,38 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <%
+                                                ProductDAO dao = new ProductDAO();
+                                                ResultSet rs = dao.ListSomeOrder();
+                                                while (rs.next()) {
+                                            %>   
                                             <tr>
-                                                <td>AL3947</td>
-                                                <td>Phạm Thị Ngọc</td>
-                                                <td>
-                                                    19.770.000 đ
-                                                </td>
-                                                <td><span class="badge bg-info">Chờ xử lý</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>ER3835</td>
-                                                <td>Nguyễn Thị Mỹ Yến</td>
-                                                <td>
-                                                    16.770.000 đ	
-                                                </td>
-                                                <td><span class="badge bg-warning">Đang vận chuyển</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>MD0837</td>
-                                                <td>Triệu Thanh Phú</td>
-                                                <td>
-                                                    9.400.000 đ	
-                                                </td>
-                                                <td><span class="badge bg-success">Đã hoàn thành</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>MT9835</td>
-                                                <td>Đặng Hoàng Phúc	</td>
-                                                <td>
-                                                    40.650.000 đ	
-                                                </td>
-                                                <td><span class="badge bg-danger">Đã hủy	</span></td>
-                                            </tr>
+                                                <td><%= rs.getInt("order_id")%></td>
+                                                <td><%= rs.getString("name")%></td>
+                                                <td><%= rs.getInt("order_price")%></td>
+                                                <%
+                                                    if (rs.getInt("status") == 0) {
+                                                %>
+                                                <td><span class="badge bg-danger">Cancel</span></td>
+                                                <%
+                                                } else if (rs.getInt("status") == 1) {
+                                                %>
+                                                <td><span class="badge bg-info">Delivering</span></td>
+                                                <%
+                                                } else if (rs.getInt("status") == 2) {
+                                                %>
+                                                <td><span class="badge bg-success">Received</span></td>
+                                                <%
+                                                } else {
+                                                %>
+                                                <td><span class="badge bg-warning">Waiting to confirm</span></td>
+                                                <%
+                                                    }
+                                                %>       
+                                            </tr>    
+                                            <%
+                                                }
+                                            %>
                                         </tbody>
                                     </table>
                                 </div>
@@ -203,37 +204,27 @@
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
-                                                <th>Name</th>
+                                                <th>Customer ID</th>
+                                                <th>Full Name</th>
                                                 <th>Date Of Birth</th>
                                                 <th>Phone Number</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <%
+                                                AccountDAO acdao = new AccountDAO();
+                                                ResultSet rst = acdao.ListTopAccount();
+                                                while (rst.next()) {
+                                            %> 
                                             <tr>
-                                                <td>#183</td>
-                                                <td>Hột vịt muối</td>
-                                                <td>21/7/1992</td>
-                                                <td><span class="tag tag-success">0921387221</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>#219</td>
-                                                <td>Bánh tráng trộn</td>
-                                                <td>30/4/1975</td>
-                                                <td><span class="tag tag-warning">0912376352</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>#627</td>
-                                                <td>Cút rang bơ</td>
-                                                <td>12/3/1999</td>
-                                                <td><span class="tag tag-primary">01287326654</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>#175</td>
-                                                <td>Hủ tiếu nam vang</td>
-                                                <td>4/12/20000</td>
-                                                <td><span class="tag tag-danger">0912376763</span></td>
-                                            </tr>
+                                                <td><%= rst.getInt("account_id")%></td>
+                                                <td><%= rst.getString("name")%></td>
+                                                <td><%= rst.getDate("date_of_birth")%></td>
+                                                <td><%= rst.getString("phone_number")%></span></td>
+                                            </tr>                                            
+                                            <%
+                                                }
+                                            %>
                                         </tbody>
                                     </table>
                                 </div>

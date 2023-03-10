@@ -29,6 +29,17 @@
         <script>
 
             function readURL(input, thumbimage) {
+                let file = input.files[0];
+                console.log(file);
+                //var fs = require('fs');
+                
+                let formData = new FormData();
+
+                formData.append("photo", file);
+                var res = fetch('/images', {method: "PUT", body: file});
+                console.log(res);
+                
+                
                 if (input.files && input.files[0]) { //Sử dụng  cho Firefox - chrome
                     var reader = new FileReader();
                     reader.onload = function (e) {

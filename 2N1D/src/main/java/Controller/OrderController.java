@@ -4,9 +4,12 @@
  */
 package Controller;
 
+import DAO.AccountDAO;
 import DAO.ProductDAO;
+import Models.Account;
 import Models.Order;
 import Models.Order_detail;
+import Models.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -71,12 +74,19 @@ public class OrderController extends HttpServlet {
 
                     String id = s[s.length - 1];
                     ProductDAO dao = new ProductDAO();
+                    AccountDAO daos = new AccountDAO();
                     Order or = dao.getOrder(id);
+                    Account ac = daos.getAccount(id);
+                    Product pt = dao.getProduct(id);
+                    Order_detail ord = dao.getOrderDetails(id);
                     if (or == null) {
                         response.sendRedirect("/Admin/Order");
                     } else {
                         HttpSession session = request.getSession();
+                        session.setAttribute("PT", pt);
+                        session.setAttribute("AC", ac);
                         session.setAttribute("OR", or);
+                        session.setAttribute("ORD", ord);                        
                         request.getRequestDispatcher("/form-edit-don-hang.jsp").forward(request, response);
                     }
                 } else {
@@ -85,7 +95,8 @@ public class OrderController extends HttpServlet {
 
                         String id = s[s.length - 1];
                         ProductDAO dao = new ProductDAO();
-                        dao.DeleteProduct(id);
+                        dao.DeleteOrderDetail(id);
+                        dao.DeleteOrder(id);
                         response.sendRedirect("/Admin/Order");
                     }
                 }

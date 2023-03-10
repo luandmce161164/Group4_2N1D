@@ -39,6 +39,20 @@ public class AccountDAO {
         return rs;
     }
 
+    public ResultSet ListTopAccount() {
+        ResultSet rs = null;
+        try {
+            Statement st = conn.createStatement();
+            rs = st.executeQuery("SELECT TOP(5) account_id, [name], date_of_birth, phone_number FROM Account \n"
+                    + "where [status] > 0 \n"
+                    + "Order by account_id desc");
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+        return rs;
+    }
+
     public Account getAccount(String id) {
         Account ac = null;
         try {
@@ -85,7 +99,7 @@ public class AccountDAO {
             pst.setDate(4, ac.getDate_of_birth());
             pst.setString(5, ac.getEmail());
             pst.setString(6, ac.getPhone_number());
-            pst.setString(7, ac.getPassword());          
+            pst.setString(7, ac.getPassword());
             pst.setString(8, ac.getAddress());
             pst.setInt(9, ac.getAccount_id());
             count = pst.executeUpdate();
@@ -106,7 +120,7 @@ public class AccountDAO {
         }
         return count;
     }
-    
+
     public int getNumberOfCustomers() {
         int n = 0;
         ResultSet rs = null;

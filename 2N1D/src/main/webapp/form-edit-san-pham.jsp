@@ -181,11 +181,11 @@
         <main class="app-content">
             <div class="app-title">
                 <%
-                                Product pt = (Product) session.getAttribute("PT");
-                            %>
+                    Product pt = (Product) session.getAttribute("PT");
+                %>
                 <ul class="app-breadcrumb breadcrumb">
                     <li class="breadcrumb-item"><a href="<%= getServletContext().getContextPath()%>/Admin/Product">List of Products</a></li>
-                    <li class="breadcrumb-item"><a href="<%= getServletContext().getContextPath()%>/Admin/Product/Edit/<%= pt.getProduct_id() %>">Edit Product's Information</a></li>
+                    <li class="breadcrumb-item"><a href="<%= getServletContext().getContextPath()%>/Admin/Product/Edit/<%= pt.getProduct_id()%>">Edit Product's Information</a></li>
                 </ul>
             </div>
             <div class="row">
@@ -193,19 +193,19 @@
                     <div class="tile">
                         <h3 class="tile-title">Edit Product's Information</h3>
                         <div class="tile-body">      
-                            
+
                             <form class="row" method="post" action="ProductController">
                                 <div class="form-group col-md-3">
                                     <label class="control-label">Product ID</label>
-                                    <input class="form-control" type="text" name="txtProductID" readonly value ="<%= pt.getProduct_id() %>" />                                    
+                                    <input class="form-control" type="text" name="txtProductID" readonly value ="<%= pt.getProduct_id()%>" />                                    
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label class="control-label">Product Name</label>
-                                    <input class="form-control" type="text" name="txtProductName" value="<%= pt.getName() %>" />
+                                    <input class="form-control" type="text" name="txtProductName" value="<%= pt.getName()%>" />
                                 </div>
                                 <div class="form-group  col-md-3">
                                     <label class="control-label">Quantity</label>
-                                    <input class="form-control" type="number" name="txtQuantity" value="<%= pt.getQuantity() %>" />
+                                    <input class="form-control" type="number" name="txtQuantity" value="<%= pt.getQuantity()%>" />
                                 </div>                                
                                 <div class="form-group col-md-3">
                                     <label for="exampleSelect1" class="control-label">Category</label>

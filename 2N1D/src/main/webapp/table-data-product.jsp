@@ -131,8 +131,15 @@
                                     <td><%= rs.getString("detail_product")%></td>
                                     <td><%= rs.getString("size")%></td>
                                     <td><%= rs.getInt("quantity")%></td>                                    
-                                    <td><a href="#" onclick="myFunction(this)"><button id="delete_<%= rs.getString("product_id")%>" class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button> </a>
-                                        <a href="<%= getServletContext().getContextPath()%>/Admin/Product/Edit/<%= rs.getString("product_id")%>"><button class="btn btn-primary btn-sm edit" type="button"><i class="fas fa-edit"></i></button> </a>
+                                    <td>
+                                        <button onclick="deleteProduct(this)" id="delete_<%= rs.getString("product_id")%>" class="btn btn-primary btn-sm trash" type="button" title="Xóa">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <a href="<%= getServletContext().getContextPath()%>/Admin/Product/Edit/<%= rs.getString("product_id")%>">
+                                            <button class="btn btn-primary btn-sm edit" type="button">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </a>
                                     </td>
                                 </tr>                                                                                                                                                                     
 
@@ -163,70 +170,71 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/jquery.dataTable.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/dataTables.bootstrap.min.js"></script>  
     <script type="text/javascript">
-                                        $('#sampleTable').DataTable();
-                                        //Thời Gian
-                                        function time() {
-                                            var today = new Date();
-                                            var weekday = new Array(7);
-                                            weekday[0] = "Sunday";
-                                            weekday[1] = "Monday";
-                                            weekday[2] = "Tuesday";
-                                            weekday[3] = "Wednesday";
-                                            weekday[4] = "Thursday";
-                                            weekday[5] = "Friday";
-                                            weekday[6] = "Saturday";
-                                            var day = weekday[today.getDay()];
-                                            var dd = today.getDate();
-                                            var mm = today.getMonth() + 1;
-                                            var yyyy = today.getFullYear();
-                                            var h = today.getHours();
-                                            var m = today.getMinutes();
-                                            var s = today.getSeconds();
-                                            m = checkTime(m);
-                                            s = checkTime(s);
-                                            nowTime = h + " : " + m + " : " + s;
-                                            if (dd < 10) {
-                                                dd = '0' + dd
-                                            }
-                                            if (mm < 10) {
-                                                mm = '0' + mm
-                                            }
-                                            today = day + ', ' + dd + '/' + mm + '/' + yyyy;
-                                            tmp = '<span class="date"> ' + today + ' - ' + nowTime +
-                                                    '</span>';
-                                            document.getElementById("clock").innerHTML = tmp;
-                                            clocktime = setTimeout("time()", "1000", "Javascript");
-
-                                            function checkTime(i) {
-                                                if (i < 10) {
-                                                    i = "0" + i;
+                                            $('#sampleTable').DataTable();
+                                            //Thời Gian
+                                            function time() {
+                                                var today = new Date();
+                                                var weekday = new Array(7);
+                                                weekday[0] = "Sunday";
+                                                weekday[1] = "Monday";
+                                                weekday[2] = "Tuesday";
+                                                weekday[3] = "Wednesday";
+                                                weekday[4] = "Thursday";
+                                                weekday[5] = "Friday";
+                                                weekday[6] = "Saturday";
+                                                var day = weekday[today.getDay()];
+                                                var dd = today.getDate();
+                                                var mm = today.getMonth() + 1;
+                                                var yyyy = today.getFullYear();
+                                                var h = today.getHours();
+                                                var m = today.getMinutes();
+                                                var s = today.getSeconds();
+                                                m = checkTime(m);
+                                                s = checkTime(s);
+                                                nowTime = h + " : " + m + " : " + s;
+                                                if (dd < 10) {
+                                                    dd = '0' + dd
                                                 }
-                                                return i;
+                                                if (mm < 10) {
+                                                    mm = '0' + mm
+                                                }
+                                                today = day + ', ' + dd + '/' + mm + '/' + yyyy;
+                                                tmp = '<span class="date"> ' + today + ' - ' + nowTime +
+                                                        '</span>';
+                                                document.getElementById("clock").innerHTML = tmp;
+                                                clocktime = setTimeout("time()", "1000", "Javascript");
+
+                                                function checkTime(i) {
+                                                    if (i < 10) {
+                                                        i = "0" + i;
+                                                    }
+                                                    return i;
+                                                }
                                             }
-                                        }
     </script>
     <script>
         function deleteRow(r) {
             var i = r.parentNode.parentNode.rowIndex;
             document.getElementById("sampleTable").deleteRow(i);
         }
-        jQuery(function () {
-            jQuery(".trash").click(function () {
-                swal({
-                    title: "Cảnh báo",
-                    text: "Bạn có chắc chắn là muốn xóa sản phẩm này?",
-                    buttons: ["Hủy bỏ", "Đồng ý"]
-                })
-                        .then((willDelete) => {
-                            if (willDelete) {
-                                var product_id = this.id.split('_')[1];
-                                var urlDelete = "<%= getServletContext().getContextPath()%>/Admin/Product/Delete/" + product_id;
-                                window.location.href = urlDelete;
-                                //swal("Đã xóa thành công.!", {});
-                            }
-                        });
+
+        function deleteProduct(control) {
+            swal({
+                title: "Cảnh báo",
+                text: "Bạn có chắc chắn là muốn xóa sản phẩm này?",
+                buttons: ["Hủy bỏ", "Đồng ý"]
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    var product_id = control.id.split('_')[1];
+                    var urlDelete = window.location.href + "/Delete/" + product_id;
+                    window.location.href = urlDelete;
+                    //swal("Đã xóa thành công.!", {});
+                }
             });
-        });
+        }
+
+
         oTable = $('#sampleTable').dataTable();
         $('#all').click(function (e) {
             $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));

@@ -49,7 +49,7 @@ public class ProductDAO {
             pst.setString(1, id);
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
-                pt = new Product(rs.getString("product_id"), rs.getString("name"), rs.getInt("product_price"), rs.getString("image"), rs.getInt("category_id"), rs.getDate("publish_date"), rs.getInt("status"), rs.getString("detail_product"), rs.getString("size"), rs.getInt("quantity"));
+                pt = new Product(rs.getString("product_id"), rs.getString("product_name"), rs.getInt("product_price"), rs.getString("image"), rs.getInt("category_id"), rs.getDate("publish_date"), rs.getInt("status"), rs.getString("detail_product"), rs.getString("size"), rs.getInt("quantity"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -140,6 +140,17 @@ public class ProductDAO {
         }
         return n;
     }
+    
+    public ResultSet getDetailOutofStock() {        
+        ResultSet rs = null;
+        try {
+            Statement st = conn.createStatement();
+            rs = st.executeQuery("select product_id, product_name, [image], quantity, product_price, detail_product from Product where quantity = 0");            
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rs;
+    }
 
     public ResultSet ListAllOrder() {
         ResultSet rs = null;
@@ -149,6 +160,36 @@ public class ProductDAO {
                     + "from [Order] o join Order_detail od on o.order_id = od.order_id "
                     + "join Account a on o.account_id = a.account_id "
                     + "join Product p on od.product_id = p.product_id");
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rs;
+    }
+
+    public ResultSet ListSomeOrder() {
+        ResultSet rs = null;
+        try {
+            Statement st = conn.createStatement();
+            rs = st.executeQuery("Select TOP(5)o.order_id, a.[name], od.order_price, o.[status]\n"
+                    + " from [Order] o join Order_detail od on o.order_id = od.order_id \n"
+                    + " join Account a on o.account_id = a.account_id \n"
+                    + " join Product p on od.product_id = p.product_id");
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rs;
+    }
+
+    public ResultSet ListOrderReport() {
+        ResultSet rs = null;
+        try {
+            Statement st = conn.createStatement();
+            rs = st.executeQuery("Select o.order_id, a.[name], p.product_name, od.quantity, od.order_price\n"
+                    + "from [Order] o join Order_detail od on o.order_id = od.order_id \n"
+                    + "join Account a on o.account_id = a.account_id \n"
+                    + "join Product p on od.product_id = p.product_id\n"
+                    + "where o.status = '2'\n"
+                    + "order by order_id asc");
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -171,6 +212,22 @@ public class ProductDAO {
         return or;
     }
     
+    public Order_detail getOrderDetails(String id) {
+        Order_detail ord = null;
+        try {
+            PreparedStatement pst = conn.prepareStatement("select p.product_id, p.product_name, p.product_price, p.image, c.category_id, p.publish_date, p.status, p.detail_product, p.size, p.quantity from Product p \n"
+                    + "join Category c on p.category_id = c.category_id where p.product_id = ? \n");
+            pst.setString(1, id);
+            ResultSet rs = pst.executeQuery();
+//            if (rs.next()) {
+//                or = new Product(rs.getString("product_id"), rs.getString("name"), rs.getInt("product_price"), rs.getString("image"), rs.getInt("category_id"), rs.getDate("publish_date"), rs.getInt("status"), rs.getString("detail_product"), rs.getString("size"), rs.getInt("quantity"));
+//            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ord;
+    }
+
     public int getNumberOfOrders() {
         int n = 0;
         ResultSet rs = null;
@@ -200,11 +257,23 @@ public class ProductDAO {
         }
         return count;
     }
-    
+
     public int DeleteOrder(String id) {
         int count = 0;
         try {
-            PreparedStatement pst = conn.prepareStatement("delete from Order where Order_id=?");
+            PreparedStatement pst = conn.prepareStatement("delete from Order where order_id=?");
+            pst.setString(1, id);
+            count = pst.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return count;
+    }
+    
+     public int DeleteOrderDetail (String id) {
+        int count = 0;
+        try {
+            PreparedStatement pst = conn.prepareStatement("delete from Order_detail where order_id=?");
             pst.setString(1, id);
             count = pst.executeUpdate();
         } catch (SQLException ex) {
@@ -228,7 +297,7 @@ public class ProductDAO {
         }
         return count;
     }
-    
+
     public int getMaxIDOrder() {
         int m = 0;
         ResultSet rs = null;
@@ -243,6 +312,7 @@ public class ProductDAO {
         }
         return m;
     }
+
     public int getMaxIDOrderDetail() {
         int m = 0;
         ResultSet rs = null;
@@ -257,7 +327,7 @@ public class ProductDAO {
         }
         return m;
     }
-    
+
     public int checkIdExist(int oid) {
         int m = 0;
         int check = 0;
@@ -267,11 +337,10 @@ public class ProductDAO {
             rs = st.executeQuery("select order_id from [Order]");
             while (rs.next()) {
                 m = rs.getInt("order_id");
-                if(oid == m){
-                   check = 1;    
-                   break;
-                }
-                else {
+                if (oid == m) {
+                    check = 1;
+                    break;
+                } else {
                     check = 0;
                 }
             }
@@ -280,13 +349,13 @@ public class ProductDAO {
         }
         return check;
     }
-    
+
     public int getTotalIncome() {
         int n = 0;
         ResultSet rs = null;
         try {
             Statement st = conn.createStatement();
-            rs = st.executeQuery("select sum(order_price) as nq from Order_detail");
+            rs = st.executeQuery("select sum(order_price) as nq from Order_detail od join [Order] o on od.order_id = o.order_id where [status] ='2'");
             if (rs.next()) {
                 n = rs.getInt("nq");
             }
@@ -295,7 +364,7 @@ public class ProductDAO {
         }
         return n;
     }
-    
+
     public int getTotalCancelOrder() {
         int n = 0;
         ResultSet rs = null;
@@ -310,5 +379,19 @@ public class ProductDAO {
         }
         return n;
     }
+    
+    public ResultSet getBestSeller() {
+        ResultSet rs = null;
+        try {
+            Statement st = conn.createStatement();
+            rs = st.executeQuery("select * from Product where product_id "
+                    + "in (select product_id from (select product_id, sum(quantity) quantity from Order_detail group by product_id) pd "
+                    + "where quantity > 5)");
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rs;
+    }
+    
 
 }

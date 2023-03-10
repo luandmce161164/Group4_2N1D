@@ -13,7 +13,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Date;
+
 
 /**
  *
@@ -85,8 +89,8 @@ public class ProductController extends HttpServlet {
 
                         String id = s[s.length - 1];
                         ProductDAO dao = new ProductDAO();
-                        dao.DeleteOrder(id);
-                        response.sendRedirect("/Admin/Order");
+                        dao.DeleteProduct(id);
+                        response.sendRedirect("/Admin/Product");
                     }
                 }
             }
@@ -151,4 +155,38 @@ public class ProductController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    public void UploadImage(HttpServletRequest request) {
+         String urlString = "http://example.com/upload.php"; // URL của server
+        String filename = "image.jpg"; // tên của file ảnh
+        File file = new File(filename);
+
+        // Tạo kết nối HTTP
+        HttpURLConnection conn = (HttpURLConnection) new URL(urlString).openConnection();
+        conn.setDoOutput(true);
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "image/jpeg");
+        conn.setRequestProperty("Content-Length", String.valueOf(file.length()));
+
+        // Đọc file ảnh và ghi vào luồng kết nối
+        InputStream in = new FileInputStream(file);
+        OutputStream out = conn.getOutputStream();
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+        while ((bytesRead = in.read(buffer)) != -1) {
+            out.write(buffer, 0, bytesRead);
+        }
+        out.close();
+        in.close();
+
+        // Đọc phản hồi từ server
+        int status = conn.getResponseCode();
+        if (status == HttpURLConnection.HTTP_OK) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String response = reader.readLine();
+            System.out.println(response);
+            reader.close();
+        } else {
+            System.out.println("Server returned non-OK status: " + status);
+        }
+    }
 }

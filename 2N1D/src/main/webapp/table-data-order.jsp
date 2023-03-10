@@ -129,8 +129,8 @@
                                         <%
                                             }
                                         %>                    
-                                        <td><a href="#" onclick="myFunction(this)"><button id="delete_<%= rs.getString("order_id")%>" class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button> </a>
-                                            <a href="<%= getServletContext().getContextPath()%>/Admin/Order/Edit/<%= rs.getString("order_id")%>"><button class="btn btn-primary btn-sm edit" type="button"><i class="fas fa-edit"></i></button> </a>
+                                        <td><a href="#" onclick="myFunction(this)"><button id="delete_<%= rs.getInt("order_id")%>" class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button> </a>
+                                            <a href="<%= getServletContext().getContextPath()%>/Admin/Order/Edit/<%= rs.getInt("order_id")%>"><button class="btn btn-primary btn-sm edit" type="button"><i class="fas fa-edit"></i></button> </a>
                                     </tr>    
                                     <%
                                         }
@@ -234,13 +234,12 @@
         <script>
             function deleteRow(r) {
                 var i = r.parentNode.parentNode.rowIndex;
-                document.getElementById("myTable").deleteRow(i);
+                document.getElementById("sampleTable").deleteRow(i);
             }
             jQuery(function () {
                 jQuery(".trash").click(function () {
                     swal({
                         title: "Cảnh báo",
-
                         text: "Bạn có chắc chắn là muốn xóa đơn hàng này?",
                         buttons: ["Hủy bỏ", "Đồng ý"]
                     })
@@ -248,9 +247,9 @@
                                 if (willDelete) {
                                     var order_id = this.id.split('_')[1];
                                     var urlDelete = "<%= getServletContext().getContextPath()%>/Admin/Order/Delete/" + order_id;
-                                    swal("Đã xóa thành công.!", {
-
-                                    });
+                                    console.log(urlDelete);
+                                    window.location.href = urlDelete;
+//                                    swal("Đã xóa thành công.!", {});
                                 }
                             });
                 });

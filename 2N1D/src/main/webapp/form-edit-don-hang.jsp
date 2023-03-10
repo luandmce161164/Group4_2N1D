@@ -4,6 +4,10 @@
     Author     : User
 --%>
 
+<%@page import="Models.Order_detail"%>
+<%@page import="Models.Order"%>
+<%@page import="Models.Account"%>
+<%@page import="Models.Product"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -71,62 +75,52 @@
         <main class="app-content">
             <div class="app-title">
                 <ul class="app-breadcrumb breadcrumb">
+                    <%
+                        Product pt = (Product) session.getAttribute("PT");
+                        Account ac = (Account) session.getAttribute("AC");
+                        Order or = (Order) session.getAttribute("OR");
+                        Order_detail ord = (Order_detail) session.getAttribute("ORD");
+                    %>
                     <li class="breadcrumb-item"><a href="<%= getServletContext().getContextPath()%>/Admin/Order">List Of Orders</a></li>
-                    <li class="breadcrumb-item"><a href="<%= getServletContext().getContextPath()%>/Admin/Order/Edit">Add new order</a></li>
+                    <li class="breadcrumb-item"><a href="<%= getServletContext().getContextPath()%>/Admin/Order/Edit/<%= or.getOrder_id()%>">Edit Order's Information</a></li>
                 </ul>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="tile">
-                        <h3 class="tile-title">Add New Order</h3>
+                        <h3 class="tile-title">Edit Order's Information</h3>
                         <div class="tile-body">
-                            <form class="row">
+                            <form class="row" action="OrderController" method="post">                               
                                 <div class="form-group  col-md-4">
-                                    <label class="control-label">ID đơn hàng ( Nếu không nhập sẽ tự động phát sinh )</label>
-                                    <input class="form-control" type="text">
+                                    <label class="control-label">Customer's ID</label>
+                                    <input class="form-control" type="text" name="txtCustomerID" value="<%= ac.getAccount_id()%>" readonly>
                                 </div>
                                 <div class="form-group  col-md-4">
-                                    <label class="control-label">Tên khách hàng</label>
-                                    <input class="form-control" type="text" >
+                                    <label class="control-label">Product's ID</label>
+                                    <input class="form-control" type="text" name="txtProductID" value="<%= pt.getProduct_id()%>" readonly>
                                 </div>
                                 <div class="form-group  col-md-4">
-                                    <label class="control-label">Số điện thoại khách hàng</label>
-                                    <input class="form-control" type="number" >
+                                    <label class="control-label">Date</label>
+                                    <input class="form-control" type="text" name="txtDate" value="<%= or.getOrder_date() %>" readonly>
                                 </div>
                                 <div class="form-group  col-md-4">
-                                    <label class="control-label">Địa chỉ khách hàng</label>
-                                    <input class="form-control" type="text" >
-                                </div>                               
+                                    <label class="control-label">Quantity</label>
+                                    <input class="form-control" type="text" name="txtQuantity" value="<%= ord.getQuantity() %>" readonly>
+                                </div>                             
                                 <div class="form-group  col-md-4">
-                                    <label class="control-label">Ngày làm đơn hàng</label>
-                                    <input class="form-control" type="date" >
-                                </div>
-                                <div class="form-group  col-md-4">
-                                    <label class="control-label">Tên sản phẩm cần bán</label>
-                                    <input class="form-control" type="text">
-                                </div>
-                                <div class="form-group  col-md-4">
-                                    <label class="control-label">Mã sản phẩm</label>
-                                    <input class="form-control" type="text">
-                                </div>
-                                <div class="form-group  col-md-4">
-                                    <label class="control-label">Số lượng</label>
-                                    <input class="form-control" type="number">
-                                </div>
+                                    <label class="control-label">Total Price</label>
+                                    <input class="form-control" type="text" name="txtTPrice" value="<%= ord.getOrder_price()%>" readonly>
+                                </div>                                                               
                                 <div class="form-group col-md-4">
-                                    <label for="exampleSelect1" class="control-label">Tình trạng</label>
-                                    <select class="form-control" id="exampleSelect1">
-                                        <option>-- Chọn tình trạng --</option>
-                                        <option>Đã xử lý</option>
-                                        <option>Đang chờ</option>
-                                        <option>Đã hủy</option>
+                                    <label for="exampleSelect1" class="control-label">Status</label>
+                                    <select class="form-control" id="exampleSelect1" name="txtStatus" >
+                                        <option>-- Select status --</option>
+                                        <option value="3"<%= (or.getStatus()== 3 ? "selected" : "")%>>Waiting for confirm</option>
+                                        <option value="1"<%= (or.getStatus()== 1 ? "selected" : "")%>>Delivery</option>
+                                        <option value="2"<%= (or.getStatus() == 2 ? "selected" : "")%>>Received</option>                                        
+                                        <option value="0"<%= (or.getStatus() == 0 ? "selected" : "")%>>Cancel</option>                                        
                                     </select>
-                                </div>
-                                <div class="form-group  col-md-4">
-                                    <label class="control-label">Ghi chú đơn hàng</label>
-                                    <textarea class="form-control" rows="4" ></textarea>
-                                </div>  
-
+                                </div> 
                         </div>
                         <button class="btn btn-save" type="button">Save</button>
                         <a class="btn btn-cancel" href="<%= getServletContext().getContextPath()%>/Admin/Order">Cancel</a>

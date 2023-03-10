@@ -111,7 +111,6 @@
                                         <option value="0">Cancel</option>                                        
                                     </select>
                                 </div>                                
-
                         </div>
                         <button class="btn btn-save" type="Submit" value="submit" name="btnInsert">Save</button>
                         <a class="btn btn-cancel" href="<%= getServletContext().getContextPath()%>/Admin/Order">Cancel</a>

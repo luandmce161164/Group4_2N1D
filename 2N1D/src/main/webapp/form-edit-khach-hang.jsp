@@ -180,8 +180,8 @@
         <main class="app-content">
             <div class="app-title">
                 <%
-                                Account ac = (Account) session.getAttribute("AC");
-                            %>
+                    Account ac = (Account) session.getAttribute("AC");
+                %>
                 <ul class="app-breadcrumb breadcrumb">
                     <li class="breadcrumb-item"><a href="<%= getServletContext().getContextPath()%>/Admin/Customer">List Of Customer</a></li>
                     <li class="breadcrumb-item"><a href="<%= getServletContext().getContextPath()%>/Admin/Customer/Edit/<%= ac.getAccount_id()%>">Edit Customer's Information</a></li>
@@ -194,7 +194,7 @@
 
                         <h3 class="tile-title">Edit Customer's Information</h3> 
                         <div class="tile-body"> 
-                            
+
                             <form class="row" action="AccountController" method="post">
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Customer ID</label>
