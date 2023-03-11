@@ -9,20 +9,30 @@ import Models.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 
 /**
  *
  * @author User
  */
+@MultipartConfig
 public class ProductController extends HttpServlet {
 
     /**
@@ -105,10 +115,30 @@ public class ProductController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
+    @Override    
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (request.getParameter("btnInsert") != null) {
+        
+        Part filePart = request.getPart("txtImage");
+        String fileName = null;
+        String submitImageFileName = filePart.getSubmittedFileName();
+        
+        if (submitImageFileName != "") {
+            InputStream fileContent = filePart.getInputStream();
+
+            //gen format HHmmssddMMyyyy and add to file name
+            LocalDateTime currentTime = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmmssddMMyyyy");
+            String formattedTime = currentTime.format(formatter);
+            submitImageFileName = formattedTime + "_" + submitImageFileName;
+            
+            String filePath = getServletContext().getRealPath("/images/") + File.separator + submitImageFileName;
+            Files.copy(fileContent, Paths.get(filePath));
+            
+            fileName = "images/" + submitImageFileName;
+        }
+        
+        if (request.getParameter("btnInsert") != null) {            
             String pid = request.getParameter("txtProductID");
             String pname = request.getParameter("txtProductName");
             String quantity = request.getParameter("txtQuantity");
@@ -116,7 +146,7 @@ public class ProductController extends HttpServlet {
             String pprice = request.getParameter("txtProductPrice");
             String pdate = request.getParameter("txtDate");
             String size = request.getParameter("txtSize");
-            String image = request.getParameter("txtImage");
+            String image = fileName;
             String description = request.getParameter("txtDescription");
             Product pt = new Product(pid, pname, Integer.parseInt(pprice), image, Integer.parseInt(category), Date.valueOf(pdate), 1, description, size, Integer.parseInt(quantity));
             ProductDAO dao = new ProductDAO();
@@ -136,7 +166,7 @@ public class ProductController extends HttpServlet {
             String status = request.getParameter("txtStatus");
             String pdate = request.getParameter("txtDate");
             String size = request.getParameter("txtSize");
-            String image = request.getParameter("txtImage");
+            String image = fileName;
             String description = request.getParameter("txtDescription");
             Product pt = new Product(pid, pname, Integer.parseInt(pprice), image, Integer.parseInt(category), Date.valueOf(pdate), Integer.parseInt(status), description, size, Integer.parseInt(quantity));
             ProductDAO dao = new ProductDAO();
@@ -155,38 +185,4 @@ public class ProductController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    public void UploadImage(HttpServletRequest request) {
-         String urlString = "http://example.com/upload.php"; // URL của server
-        String filename = "image.jpg"; // tên của file ảnh
-        File file = new File(filename);
-
-        // Tạo kết nối HTTP
-        HttpURLConnection conn = (HttpURLConnection) new URL(urlString).openConnection();
-        conn.setDoOutput(true);
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "image/jpeg");
-        conn.setRequestProperty("Content-Length", String.valueOf(file.length()));
-
-        // Đọc file ảnh và ghi vào luồng kết nối
-        InputStream in = new FileInputStream(file);
-        OutputStream out = conn.getOutputStream();
-        byte[] buffer = new byte[1024];
-        int bytesRead;
-        while ((bytesRead = in.read(buffer)) != -1) {
-            out.write(buffer, 0, bytesRead);
-        }
-        out.close();
-        in.close();
-
-        // Đọc phản hồi từ server
-        int status = conn.getResponseCode();
-        if (status == HttpURLConnection.HTTP_OK) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String response = reader.readLine();
-            System.out.println(response);
-            reader.close();
-        } else {
-            System.out.println("Server returned non-OK status: " + status);
-        }
-    }
 }

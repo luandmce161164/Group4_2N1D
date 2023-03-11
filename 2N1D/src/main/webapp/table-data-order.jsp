@@ -129,8 +129,9 @@
                                         <%
                                             }
                                         %>                    
-                                        <td><a href="#" onclick="myFunction(this)"><button id="delete_<%= rs.getInt("order_id")%>" class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button> </a>
-                                            <a href="<%= getServletContext().getContextPath()%>/Admin/Order/Edit/<%= rs.getInt("order_id")%>"><button class="btn btn-primary btn-sm edit" type="button"><i class="fas fa-edit"></i></button> </a>
+                                        <td><button onclick="deleteOrder(this)" id="delete_<%= rs.getInt("order_id")%>" class="btn btn-primary btn-sm trash" type="button" title="Xóa">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button><a href="<%= getServletContext().getContextPath()%>/Admin/Order/Edit/<%= rs.getInt("order_id")%>"><button class="btn btn-primary btn-sm edit" type="button"><i class="fas fa-edit"></i></button> </a>
                                     </tr>    
                                     <%
                                         }
@@ -236,24 +237,21 @@
                 var i = r.parentNode.parentNode.rowIndex;
                 document.getElementById("sampleTable").deleteRow(i);
             }
-            jQuery(function () {
-                jQuery(".trash").click(function () {
-                    swal({
-                        title: "Cảnh báo",
-                        text: "Bạn có chắc chắn là muốn xóa đơn hàng này?",
-                        buttons: ["Hủy bỏ", "Đồng ý"]
-                    })
-                            .then((willDelete) => {
-                                if (willDelete) {
-                                    var order_id = this.id.split('_')[1];
-                                    var urlDelete = "<%= getServletContext().getContextPath()%>/Admin/Order/Delete/" + order_id;
-                                    console.log(urlDelete);
-                                    window.location.href = urlDelete;
-//                                    swal("Đã xóa thành công.!", {});
-                                }
-                            });
-                });
+            function deleteOrder(control) {
+            swal({
+                title: "Cảnh báo",
+                text: "Bạn có chắc chắn là muốn xóa đơn hàng này?",
+                buttons: ["Hủy bỏ", "Đồng ý"]
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    var order_id = control.id.split('_')[1];
+                    var urlDelete = window.location.href + "/Delete/" + order_id;
+                    window.location.href = urlDelete;
+                    //swal("Đã xóa thành công.!", {});
+                }
             });
+        }
             oTable = $('#sampleTable').dataTable();
             $('#all').click(function (e) {
                 $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));

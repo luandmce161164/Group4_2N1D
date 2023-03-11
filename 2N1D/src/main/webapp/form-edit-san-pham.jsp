@@ -55,7 +55,7 @@
                 });
                 $(".removeimg").click(function () {
                     $("#thumbimage").attr('src', '').hide();
-                    $("#myfileupload").jsp('<input type="file" id="uploadfile"  onchange="readURL(this);" />');
+                    //$("#myfileupload").jsp('<input type="file" id="uploadfile" name="txtImage" onchange="readURL(this);"/>');
                     $(".removeimg").hide();
                     $(".Choicefile").bind('click', function () {
                         $("#uploadfile").click();
@@ -194,7 +194,7 @@
                         <h3 class="tile-title">Edit Product's Information</h3>
                         <div class="tile-body">      
 
-                            <form class="row" method="post" action="ProductController">
+                            <form class="row" method="post" action="ProductController" enctype="multipart/form-data">
                                 <div class="form-group col-md-3">
                                     <label class="control-label">Product ID</label>
                                     <input class="form-control" type="text" name="txtProductID" readonly value ="<%= pt.getProduct_id()%>" />                                    
@@ -241,14 +241,14 @@
                                         <option value="0"<%= (pt.getStatus() == 0 ? "selected" : "")%>>Out Of Stock</option>
                                         <option value="1"<%= (pt.getStatus() == 1 ? "selected" : "")%>>On Stock</option>                                        
                                     </select>
-                                </div>   
+                                </div>
                                 <div class="form-group col-md-12">
-                                    <label class="control-label">Image</label>
-                                    <div id="myfileupload">
-                                        <input type="file" id="uploadfile" name="txtImage" onchange="readURL(this);" />
+                                    <label class="control-label">Image</label>                                    
+                                    <div id="myfileupload">                                        
+                                        <input type="file" id="uploadfile" name="txtImage" onchange="readURL(this);"/>
                                     </div>
                                     <div id="thumbbox">
-                                        <img height="450" width="400" alt="Thumb image" id="thumbimage" style="display: none" />
+                                        <img height="400" alt="Thumb image" id="thumbimage" src="${pageContext.request.contextPath}/<%= pt.getImage()%>" />
                                         <a class="removeimg" href="javascript:"></a>
                                     </div>
                                     <div id="boxchoice">
@@ -279,8 +279,8 @@
                     <script>
                                             const inpFile = document.getElementById("inpFile");
                                             const loadFile = document.getElementById("loadFile");
-                                            const previewContainer = document.getElementById("imagePreview");
-                                            const previewContainer = document.getElementById("imagePreview");
+                                            const previewContainer = document.getElementById("thumbimage");
+                                            const previewContainer = document.getElementById("thumbimage");
                                             const previewImage = previewContainer.querySelector(".image-preview__image");
                                             const previewDefaultText = previewContainer.querySelector(".image-preview__default-text");
                                             inpFile.addEventListener("change", function () {

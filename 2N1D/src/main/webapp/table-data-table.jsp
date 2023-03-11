@@ -146,7 +146,9 @@
                                         %> 
                                         <td><%= rs.getString("address")%></td>              
                                         <td> 
-                                            <a href="#" onclick="myFunction(this)"><button id="delete_<%= rs.getInt("account_id")%>" class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button></a>
+                                            <button onclick="deleteAccount(this)" id="delete_<%= rs.getInt("account_id")%>" class="btn btn-primary btn-sm trash" type="button" title="Xóa">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
                                             <a href="<%= getServletContext().getContextPath()%>/Admin/Customer/Edit/<%= rs.getInt("account_id")%>"<button href="form-edit-khach-hang.jsp" class="btn btn-primary btn-sm edit" type="button" title="Sửa"> <i class="fas fa-edit"></i></button></a>
                                         </td>
                                     </tr>    
@@ -255,23 +257,21 @@
             var i = r.parentNode.parentNode.rowIndex;
             document.getElementById("sampleTable").deleteRow(i);
         }
-        jQuery(function () {
-            jQuery(".trash").click(function () {
-                swal({
-                    title: "Cảnh báo",
-                    text: "Bạn có chắc chắn là muốn xóa sản phẩm này?",
-                    buttons: ["Hủy bỏ", "Đồng ý"]
-                })
-                        .then((willDelete) => {
-                            if (willDelete) {
-                                var account_id = this.id.split('_')[1];
-                                var urlDelete = "<%= getServletContext().getContextPath()%>/Admin/Customer/Delete/" + account_id;
-                                window.location.href = urlDelete;
-                                //swal("Đã xóa thành công.!", {});
-                            }
-                        });
+        function deleteAccount(control) {
+            swal({
+                title: "Cảnh báo",
+                text: "Bạn có chắc chắn là muốn xóa khách hàng này?",
+                buttons: ["Hủy bỏ", "Đồng ý"]
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    var account_id = control.id.split('_')[1];
+                    var urlDelete = window.location.href + "/Delete/" + account_id;
+                    window.location.href = urlDelete;
+                    //swal("Đã xóa thành công.!", {});
+                }
             });
-        });
+        }
         oTable = $('#sampleTable').dataTable();
         $('#all').click(function (e) {
             $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));

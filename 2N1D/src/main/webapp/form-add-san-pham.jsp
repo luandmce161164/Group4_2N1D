@@ -65,7 +65,7 @@
                 });
                 $(".removeimg").click(function () {
                     $("#thumbimage").attr('src', '').hide();
-                    $("#myfileupload").jsp('<input type="file" id="uploadfile"  onchange="readURL(this);" />');
+                    //$("#myfileupload").jsp('<input type="file" id="uploadfile"  onchange="readURL(this);" />');
                     $(".removeimg").hide();
                     $(".Choicefile").bind('click', function () {
                         $("#uploadfile").click();
@@ -199,8 +199,8 @@
                 <div class="col-md-12">
                     <div class="tile">
                         <h3 class="tile-title">Add new product</h3>
-                        <div class="tile-body">                             
-                            <form class="row" action="ProductController" method="post">   
+                        <div class="tile-body">
+                            <form class="row" action="ProductController" method="post" enctype="multipart/form-data">                                
                                 <div class="form-group col-md-3">
                                     <label class="control-label">Product ID</label>
                                     <input class="form-control" type="text" name="txtProductID" required>
