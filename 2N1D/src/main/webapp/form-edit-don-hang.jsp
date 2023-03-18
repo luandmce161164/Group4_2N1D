@@ -62,10 +62,10 @@
                             class="app-menu__label">Dash Board</span></a></li>
                 <li><a class="app-menu__item " href="<%= getServletContext().getContextPath()%>/Admin/Customer"><i class='app-menu__icon bx bx-id-card'></i>
                         <span class="app-menu__label">Customer Management</span></a></li>      
-                <li><a class="app-menu__item active" href="<%= getServletContext().getContextPath()%>/Admin/Product"><i
+                <li><a class="app-menu__item " href="<%= getServletContext().getContextPath()%>/Admin/Product"><i
                             class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Product Management</span></a>
                 </li>
-                <li><a class="app-menu__item" href="<%= getServletContext().getContextPath()%>/Admin/Order"><i class='app-menu__icon bx bx-task'></i><span
+                <li><a class="app-menu__item active" href="<%= getServletContext().getContextPath()%>/Admin/Order"><i class='app-menu__icon bx bx-task'></i><span
                             class="app-menu__label">Order Management</span></a></li>      
                 <li><a class="app-menu__item" href="<%= getServletContext().getContextPath()%>/Admin/Report"><i
                             class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">View Sales Statistics</span></a>
@@ -90,7 +90,11 @@
                     <div class="tile">
                         <h3 class="tile-title">Edit Order's Information</h3>
                         <div class="tile-body">
-                            <form class="row" action="OrderController" method="post">                               
+                            <form class="row" action="OrderController" method="post">         
+                                <div class="form-group  col-md-4">
+                                    <label class="control-label">Order's ID</label>
+                                    <input class="form-control" type="text" name="txtOrderID" value="<%= or.getOrder_id()%>" readonly>
+                                </div>
                                 <div class="form-group  col-md-4">
                                     <label class="control-label">Customer's ID</label>
                                     <input class="form-control" type="text" name="txtCustomerID" value="<%= ac.getAccount_id()%>" readonly>
@@ -101,31 +105,45 @@
                                 </div>
                                 <div class="form-group  col-md-4">
                                     <label class="control-label">Date</label>
-                                    <input class="form-control" type="text" name="txtDate" value="<%= or.getOrder_date() %>" readonly>
+                                    <input class="form-control" type="text" name="txtDate" value="<%= or.getOrder_date()%>" readonly>
                                 </div>
                                 <div class="form-group  col-md-4">
                                     <label class="control-label">Quantity</label>
-                                    <input class="form-control" type="text" name="txtQuantity" value="<%= ord.getQuantity() %>" readonly>
+                                    <input class="form-control" type="text" name="txtQuantity" value="<%= ord.getQuantity()%>" readonly>
                                 </div>                             
                                 <div class="form-group  col-md-4">
                                     <label class="control-label">Total Price</label>
                                     <input class="form-control" type="text" name="txtTPrice" value="<%= ord.getOrder_price()%>" readonly>
                                 </div>                                                               
                                 <div class="form-group col-md-4">
-                                    <label for="exampleSelect1" class="control-label">Status</label>
-                                    <select class="form-control" id="exampleSelect1" name="txtStatus" >
-                                        <option>-- Select status --</option>
-                                        <option value="3"<%= (or.getStatus()== 3 ? "selected" : "")%>>Waiting for confirm</option>
-                                        <option value="1"<%= (or.getStatus()== 1 ? "selected" : "")%>>Delivery</option>
+                                    <label for="oStatus" class="control-label">Status</label>
+                                    <select class="form-control" id="Status" name="txtStatus" >                                                                             
+                                        <% if(or.getStatus() == 3) { %>                   
+                                        <option value="3"<%= (or.getStatus() == 3 ? "selected" : "")%>>Waiting for confirm</option>
+                                        <option value="1"<%= (or.getStatus() == 1 ? "selected" : "")%>>Delivery</option>
                                         <option value="2"<%= (or.getStatus() == 2 ? "selected" : "")%>>Received</option>                                        
-                                        <option value="0"<%= (or.getStatus() == 0 ? "selected" : "")%>>Cancel</option>                                        
-                                    </select>
+                                        <option value="0"<%= (or.getStatus() == 0 ? "selected" : "")%>>Cancel</option>    
+                                        <% } %>
+                                        
+                                        <% if(or.getStatus() == 1) { %>             
+                                        <option value="1"<%= (or.getStatus() == 1 ? "selected" : "")%>>Delivery</option>
+                                        <option value="2"<%= (or.getStatus() == 2 ? "selected" : "")%>>Received</option>                                        
+                                        <option value="0"<%= (or.getStatus() == 0 ? "selected" : "")%>>Cancel</option>    
+                                        <% } %>
+                                        
+                                        <% if(or.getStatus() == 2) { %>                                                                                                                      
+                                        <option value="2"<%= (or.getStatus() == 2 ? "selected" : "")%>>Received</option>                                                                                
+                                        <% } %>
+                                        <% if(or.getStatus() == 0) { %>                                                                                                                                                                                            
+                                        <option value="0"<%= (or.getStatus() == 0 ? "selected" : "")%>>Cancel</option>    
+                                        <% } %>                                        
+                                    </select>                                    
                                 </div> 
                         </div>
-                        <button class="btn btn-save" type="button">Save</button>
+                        <button class="btn btn-save" type="submit" value="submit" name="btnUpdate">Save</button>
                         <a class="btn btn-cancel" href="<%= getServletContext().getContextPath()%>/Admin/Order">Cancel</a>
                     </div>
-                    </main>
+                    </main>                    
                     <!-- Essential javascripts for application to work-->
                     <script src="${pageContext.request.contextPath}/js/jquery-3.2.1.min.js"></script>
                     <script src="${pageContext.request.contextPath}/js/popper.min.js"></script>

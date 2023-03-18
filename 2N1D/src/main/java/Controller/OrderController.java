@@ -71,14 +71,13 @@ public class OrderController extends HttpServlet {
             } else {
                 if (path.startsWith("/Admin/Order/Edit/")) {
                     String[] s = path.split("/");
-
                     String id = s[s.length - 1];
                     ProductDAO dao = new ProductDAO();
                     AccountDAO daos = new AccountDAO();
+                    Order_detail ord = dao.getOrderDetails(id);
                     Order or = dao.getOrder(id);
                     Account ac = daos.getAccount(id);
-                    Product pt = dao.getProduct(id);
-                    Order_detail ord = dao.getOrderDetails(id);
+                    Product pt = dao.getProduct(ord.getProduct_id());
                     if (or == null) {
                         response.sendRedirect("/Admin/Order");
                     } else {
@@ -86,7 +85,7 @@ public class OrderController extends HttpServlet {
                         session.setAttribute("PT", pt);
                         session.setAttribute("AC", ac);
                         session.setAttribute("OR", or);
-                        session.setAttribute("ORD", ord);                        
+                        session.setAttribute("ORD", ord);
                         request.getRequestDispatcher("/form-edit-don-hang.jsp").forward(request, response);
                     }
                 } else {
@@ -116,34 +115,28 @@ public class OrderController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ProductDAO dao = new ProductDAO();
-        int n = dao.getMaxIDOrder();
-        int m = dao.getMaxIDOrderDetail();
-
-        if (request.getParameter("btnInsert") != null) {
-            int oid = ++n;
-            int odid = ++m;
+        if (request.getParameter("btnUpdate") != null) {
+            String oid = request.getParameter("txtOrderID");
             String oproduct = request.getParameter("txtProductID");
             String ocus = request.getParameter("txtCustomerID");
             String oquan = request.getParameter("txtQuantity");
             String oprice = request.getParameter("txtTPrice");
             String odate = request.getParameter("txtDate");
             String ostatus = request.getParameter("txtStatus");
-            Order or = new Order(oid, Date.valueOf(odate), Integer.parseInt(ocus), Integer.parseInt(ostatus));
-            Order_detail orl = new Order_detail(odid, oid, oproduct, Integer.parseInt(oquan), Integer.parseInt(oprice));
-            int count = dao.AddOrder(or);
 
-            if (count > 0) {
-                count = 0;
-                if (dao.checkIdExist(oid) == 1) {
-                    count = dao.AddOrderDetail(orl);
-                    if (count > 0) {
-                        response.sendRedirect("/Admin/Order");
-                    } else {
-                        response.sendRedirect("/Admin/Order/Add");
-                    }
-                }
-            } else {
-                response.sendRedirect("/Admin/Order/Add");
+            Order or = new Order(Integer.parseInt(oid), Date.valueOf(odate), Integer.parseInt(ocus), Integer.parseInt(ostatus));
+            Order_detail orl = new Order_detail(dao.getOrderDetails(oid).getOrder_detail_id(), Integer.parseInt(oid), oproduct, Integer.parseInt(oquan), Integer.parseInt(oprice));
+            dao.UpdateOrder(or);
+            dao.UpdateOrderDetail(orl);
+            Product oldProduct = dao.getProduct(oproduct);
+            if (oldProduct.getStatus() != Integer.parseInt(ostatus) && !ostatus.equals("3")) {
+                UpdateQuantityProduct(Integer.parseInt(oquan), oproduct);
+                response.sendRedirect("/Admin/Order");
+            } else if (oldProduct.getStatus() == 2 && Integer.parseInt(ostatus) == 1) {
+                response.sendRedirect("/Admin/Order");
+            } else if (oldProduct.getStatus() != Integer.parseInt(ostatus) && Integer.parseInt(ostatus) == 0) {
+                UpdateQuantityProduct(-Integer.parseInt(oquan), oproduct);
+                response.sendRedirect("/Admin/Order");
             }
         }
     }
@@ -158,4 +151,8 @@ public class OrderController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    private void UpdateQuantityProduct(int quantity, String product_id) {
+        ProductDAO dao = new ProductDAO();
+        dao.UpdateQuantityProduct(quantity, product_id);
+    }
 }

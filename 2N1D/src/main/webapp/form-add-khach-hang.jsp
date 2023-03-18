@@ -136,6 +136,9 @@
                 transform: rotate(-45deg);
                 margin-top: -2px;
             }
+            small {
+                color: red;
+            }
         </style>
         <!-- Navbar-->
         <header class="app-header">
@@ -190,55 +193,164 @@
 
                         <h3 class="tile-title">Add new customer</h3>
                         <div class="tile-body">            
-                           <form class="row" action="CustomerController" method="post">   
+                            <form class="row" action="CustomerController" method="post">   
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Customer ID</label>
-                                    <input class="form-control" type="text" name="txtCustomerID" required>
+                                    <input class="form-control" type="text" id ="CustomerID" name="txtCustomerID">
+                                    <small></small>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Username</label>
-                                    <input class="form-control" type="text" name="txtUsername" required>
+                                    <input class="form-control" type="text" id ="Username" name="txtUsername">
+                                    <small></small>
                                 </div>                               
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Full Name</label>
-                                    <input class="form-control" type="text" name="txtCustomerName" required>
+                                    <input class="form-control" type="text" id ="FullName" name="txtCustomerName">
+                                    <small></small>
                                 </div>
-                               <div class="form-group col-md-4">
+                                <div class="form-group col-md-4">
                                     <label class="control-label">Date Of Birth</label>
-                                    <input class="form-control" type="text" name="txtCustomerDOB" required>
+                                    <input class="form-control" type="date" id ="DateOfBirth" name="txtCustomerDOB">
+                                    <small></small>
                                 </div>  
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Email</label>
-                                    <input class="form-control" type="text" name="txtCustomerEmail" required>
+                                    <input class="form-control" type="Email" id ="Email" name="txtCustomerEmail">
+                                    <small></small>
                                 </div>                                
                                 <div class="form-group  col-md-4">
                                     <label class="control-label">Phone Number</label>
-                                    <input class="form-control" type="text" name="txtCustomerPhoneNumber" required>
+                                    <input class="form-control" type="text" id ="PhoneNumber" name="txtCustomerPhoneNumber">
+                                    <small></small>
                                 </div>
                                 <div class="form-group  col-md-4">
                                     <label class="control-label">Password</label>
-                                    <input class="form-control" type="text" name="txtCustomerPassword" required>
+                                    <input class="form-control" type="text" id ="Password" name="txtCustomerPassword">
+                                    <small></small>
                                 </div>                                            
                                 <div class="form-group col-md-3">
                                     <label class="control-label">Sex</label>
-                                    <select class="form-control" id="exampleSelect2" required name="txtCustomerSex">
-                                        <option>-- Select Sex --</option>
+                                    <select class="form-control" id ="Gender" name="txtCustomerSex">
+                                        <option value="">-- Select Sex --</option>
                                         <option value="0">Male</option>
                                         <option value="1">Female</option>
                                     </select>
+                                    <small></small>
                                 </div>
-                               <div class="form-group col-md-4">
+                                <div class="form-group col-md-4">
                                     <label class="control-label">Address</label>
-                                    <input class="form-control" type="text" name="txtCustomerAddress" required>
+                                    <input class="form-control" type="text" id ="Address" name="txtCustomerAddress">
+                                    <small></small>
                                 </div>
                         </div>
                         <button class="btn btn-save" type="submit" value="Submit" name="btnInsert">Save</button>
                         <a class="btn btn-cancel" href="<%= getServletContext().getContextPath()%>/Admin/Customer">Cancel</a>
-                         </form> 
+                        </form> 
                     </div>
-
                     </main>
+                    <script>
+                        var customer_id = document.querySelector('#CustomerID');
+                        var usname = document.querySelector('#Username');
+                        var fullname = document.querySelector('#FullName');
+                        var dob = document.querySelector('#DateOfBirth');
+                        var email = document.querySelector('#Email');
+                        var phone = document.querySelector('#PhoneNumber');
+                        var pwd = document.querySelector('#Password');
+                        var gender = document.querySelector('#Gender');
+                        var address = document.querySelector('#Address');
+                        var form = document.querySelector('form');
 
+                        function showError(input, message) {
+                            let parent = input.parentElement;
+                            let small = parent.querySelector('small');
+
+                            parent.classList.add('error');
+                            small.innerText = message;
+                        }
+
+                        function showSuccess(input) {
+                            let parent = input.parentElement;
+                            let small = parent.querySelector('small');
+                            parent.classList.remove('error');
+                            small.innerText = '';
+                        }
+
+                        function getFieldName(input) {
+                            return input.id.charAt(0).toUpperCase() + input.id.slice(1)
+                        }
+
+                        function checkEmptyError(listInput) {
+                            let isEmptyError = false;
+                            listInput.forEach(input => {
+
+                                if (!input.value) {
+                                    isEmptyError = true;
+                                    let error = getFieldName(input) + ' is required';
+                                    showError(input, error);
+                                } else {
+                                    showSuccess(input);
+                                }
+                            });
+                            return isEmptyError;
+                        }
+
+                        function checkEmail(input) {
+                            const regEmail = /^\w+([\.\-_]?\w+)*\@\w+([\.\-_]?\w+)*(\.\w{2,3})+$/;
+                            input.value = input.value.trim();
+
+                            let isEmailError = !regEmail.test(input.value);
+                            if (regEmail.test(input.value)) {
+                                showSuccess(input);
+                            } else {
+                                showError(input, 'Your Email is invalid');
+                            }
+                            return isEmailError;
+                        }
+                        
+                        function checkPhone(input) {
+                            const regPhone = /^0[1-9]\d{8,9}$/;
+                            input.value = input.value.trim();
+
+                            let isPhoneError = !regPhone.test(input.value);
+                            if (regPhone.test(input.value)) {
+                                showSuccess(input);
+                            } else {
+                                showError(input, 'Your Phone Number is invalid');
+                            }
+                            return isPhoneError;
+                        }
+
+                        function checkLength(input, min, max) {
+                            input.value = input.value.trim();
+
+                            if (input.value.length < min) {
+                                let error = 'Please enter at least ' + min + ' character';
+                                showError(input, error);
+                                return true;
+                            }
+
+                            if (input.value.length > max) {
+                                let error = 'Please enter at least ' + max + ' character';
+                                showError(input, error);
+                                return true;
+                            }
+
+                            return false;
+                        }
+
+                        form.addEventListener('submit', function (e) {
+                            if (!checkEmptyError([customer_id, usname, fullname, dob, email, phone, pwd, gender, address])) {
+                                checkLength(usname,5, 15);                                
+                                checkLength(pwd, 8, 24);                                
+                                checkEmail(email);
+                                checkPhone(phone);
+                            } else {
+                                e.preventDefault();
+                            }
+
+                        });
+                    </script>
                     <!-- Essential javascripts for application to work-->
                     <script src="${pageContext.request.contextPath}/js/jquery-3.2.1.min.js"></script>
                     <script src="${pageContext.request.contextPath}/js/popper.min.js"></script>

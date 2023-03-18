@@ -9,10 +9,13 @@ import Models.Product;
 import Models.Order;
 import Models.Order_detail;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -111,6 +114,37 @@ public class ProductDAO {
         return count;
     }
 
+    public boolean checkProductIdExist(String product_id) {
+        boolean result = false;
+        ResultSet rs = null;
+        try {
+            PreparedStatement pst = conn.prepareStatement("select product_id from Product where product_id = ?");
+            pst.setString(1, product_id);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                result = true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+
+    public int getQuantityByID(String id) {
+        int n = 0;
+        ResultSet rs = null;
+        try {
+            Statement st = conn.createStatement();
+            rs = st.executeQuery("select quantity as nid from Product where product_id = ?");
+            if (rs.next()) {
+                n = rs.getInt("nid");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return n;
+    }
+
     public int getNumberOfProduct() {
         int n = 0;
         ResultSet rs = null;
@@ -140,12 +174,12 @@ public class ProductDAO {
         }
         return n;
     }
-    
-    public ResultSet getDetailOutofStock() {        
+
+    public ResultSet getDetailOutofStock() {
         ResultSet rs = null;
         try {
             Statement st = conn.createStatement();
-            rs = st.executeQuery("select product_id, product_name, [image], quantity, product_price, detail_product from Product where quantity = 0");            
+            rs = st.executeQuery("select product_id, product_name, [image], quantity, product_price, detail_product from Product where quantity = 0");
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -199,29 +233,35 @@ public class ProductDAO {
     public Order getOrder(String id) {
         Order or = null;
         try {
-            PreparedStatement pst = conn.prepareStatement("select p.product_id, p.product_name, p.product_price, p.image, c.category_id, p.publish_date, p.status, p.detail_product, p.size, p.quantity from Product p \n"
-                    + "join Category c on p.category_id = c.category_id where p.product_id = ? \n");
+            PreparedStatement pst = conn.prepareStatement("Select o.order_id, o.account_id, o.order_date, a.[name], p.product_name, od.quantity, od.order_price, o.[status]\n"
+                    + " from [Order] o join Order_detail od on o.order_id = od.order_id \n"
+                    + " join Account a on o.account_id = a.account_id \n"
+                    + " join Product p on od.product_id = p.product_id\n"
+                    + "	where o.order_id =?");
             pst.setString(1, id);
             ResultSet rs = pst.executeQuery();
-//            if (rs.next()) {
-//                or = new Product(rs.getString("product_id"), rs.getString("name"), rs.getInt("product_price"), rs.getString("image"), rs.getInt("category_id"), rs.getDate("publish_date"), rs.getInt("status"), rs.getString("detail_product"), rs.getString("size"), rs.getInt("quantity"));
-//            }
+            if (rs.next()) {
+                or = new Order(rs.getInt("order_id"), rs.getDate("order_date"), rs.getInt("account_id"), rs.getInt("status"));
+            }
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return or;
     }
-    
+
     public Order_detail getOrderDetails(String id) {
         Order_detail ord = null;
         try {
-            PreparedStatement pst = conn.prepareStatement("select p.product_id, p.product_name, p.product_price, p.image, c.category_id, p.publish_date, p.status, p.detail_product, p.size, p.quantity from Product p \n"
-                    + "join Category c on p.category_id = c.category_id where p.product_id = ? \n");
+            PreparedStatement pst = conn.prepareStatement("Select o.order_id, o.account_id, od.order_detail_id, o.order_date, a.[name], p.product_name, od.product_id, od.quantity, od.order_price, o.[status]\n"
+                    + " from [Order] o join Order_detail od on o.order_id = od.order_id\n"
+                    + " join Account a on o.account_id = a.account_id \n"
+                    + " join Product p on od.product_id = p.product_id\n"
+                    + "	where od.order_id =?");
             pst.setString(1, id);
             ResultSet rs = pst.executeQuery();
-//            if (rs.next()) {
-//                or = new Product(rs.getString("product_id"), rs.getString("name"), rs.getInt("product_price"), rs.getString("image"), rs.getInt("category_id"), rs.getDate("publish_date"), rs.getInt("status"), rs.getString("detail_product"), rs.getString("size"), rs.getInt("quantity"));
-//            }
+            if (rs.next()) {
+                ord = new Order_detail(rs.getInt("order_detail_id"), rs.getInt("order_id"), rs.getString("product_id"), rs.getInt("quantity"), rs.getInt("order_price"));
+            }
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -250,7 +290,38 @@ public class ProductDAO {
             pst.setInt(1, or.getOrder_id());
             pst.setDate(2, or.getOrder_date());
             pst.setInt(3, or.getAccount_id());
-            pst.setInt(4, or.getStatus());
+            pst.setInt(4, 3);
+            count = pst.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return count;
+    }
+
+    public int UpdateOrder(Order or) {
+        int count = 0;
+        try {
+            PreparedStatement pst = conn.prepareStatement("update [Order] set order_date=?, account_id=?, [status]=? where order_id=?");
+            pst.setDate(1, or.getOrder_date());
+            pst.setInt(2, or.getAccount_id());
+            pst.setInt(3, or.getStatus());
+            pst.setInt(4, or.getOrder_id());
+            count = pst.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return count;
+    }
+
+    public int UpdateOrderDetail(Order_detail ord) {
+        int count = 0;
+        try {
+            PreparedStatement pst = conn.prepareStatement("update Order_detail set order_detail_id=?, product_id=?, quantity=?, order_price=? where order_id=?");
+            pst.setInt(1, ord.getOrder_detail_id());
+            pst.setString(2, ord.getProduct_id());
+            pst.setInt(3, ord.getQuantity());
+            pst.setInt(4, ord.getOrder_price());
+            pst.setInt(5, ord.getOrder_id());
             count = pst.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -269,8 +340,8 @@ public class ProductDAO {
         }
         return count;
     }
-    
-     public int DeleteOrderDetail (String id) {
+
+    public int DeleteOrderDetail(String id) {
         int count = 0;
         try {
             PreparedStatement pst = conn.prepareStatement("delete from Order_detail where order_id=?");
@@ -379,7 +450,7 @@ public class ProductDAO {
         }
         return n;
     }
-    
+
     public ResultSet getBestSeller() {
         ResultSet rs = null;
         try {
@@ -392,6 +463,58 @@ public class ProductDAO {
         }
         return rs;
     }
-    
 
+    public Map<Date, Integer> getDataSale() {
+        Map<Date, Integer> dic = new HashMap<Date, Integer>();
+        try {
+            ResultSet rs = null;
+            Statement st = conn.createStatement();
+            rs = st.executeQuery("select order_date, sum(order_price) income from [Order] o\n"
+                    + "join order_detail od\n"
+                    + "on o.order_id = od.order_id\n"
+                    + "where o.status = 2\n"
+                    + "group by order_date\n");
+
+            while (rs.next()) {
+                dic.put(rs.getDate("order_date"), rs.getInt("income"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+        return dic;
+    }
+
+    public Map<Date, Integer> getDataSaleView() {
+        Map<Date, Integer> dic = new HashMap<Date, Integer>();
+        try {
+            ResultSet rs = null;
+            Statement st = conn.createStatement();
+            rs = st.executeQuery("select top (5)order_date, sum(order_price) income from [Order] o\n"
+                    + "join order_detail od\n"
+                    + "on o.order_id = od.order_id\n"
+                    + "where o.status = 2\n"
+                    + "group by order_date\n"
+                    + "order by order_date desc");
+
+            while (rs.next()) {
+                dic.put(rs.getDate("order_date"), rs.getInt("income"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+        return dic;
+    }
+    
+    public void UpdateQuantityProduct(int quantity, String product_id) {
+        try {
+            PreparedStatement pst = conn.prepareStatement("update product set quantity += ? where product_id = ?");
+            pst.setInt(1, quantity);
+            pst.setString(2, product_id);
+            pst.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

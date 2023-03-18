@@ -8,7 +8,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <title>Edit Product's Information</title>
         <meta charset="utf-8">
@@ -41,7 +40,7 @@
 
                 }
                 $("#thumbimage").show();
-                $('.filename').text($("#uploadfile").val());
+                $('.filename').text($("#UploadImage").val());
                 $('.Choicefile').css('background', '#14142B');
                 $('.Choicefile').css('cursor', 'default');
                 $(".removeimg").show();
@@ -50,7 +49,7 @@
             }
             $(document).ready(function () {
                 $(".Choicefile").bind('click', function () {
-                    $("#uploadfile").click();
+                    $("#UploadImage").click();
 
                 });
                 $(".removeimg").click(function () {
@@ -58,11 +57,12 @@
                     //$("#myfileupload").jsp('<input type="file" id="uploadfile" name="txtImage" onchange="readURL(this);"/>');
                     $(".removeimg").hide();
                     $(".Choicefile").bind('click', function () {
-                        $("#uploadfile").click();
+                        $("#UploadImage").click();
                     });
                     $('.Choicefile').css('background', '#14142B');
                     $('.Choicefile').css('cursor', 'pointer');
                     $(".filename").text("");
+                    $("#UploadImage").val("");
                 });
             })
         </script>
@@ -91,7 +91,8 @@
                 color: white;
             }
 
-            #uploadfile,
+            #UploadImage,
+            #oldImg,
             .removeimg {
                 display: none;
             }
@@ -137,6 +138,9 @@
                 display: block;
                 transform: rotate(-45deg);
                 margin-top: -2px;
+            }
+            small{
+                color: red;
             }
         </style>
         <!-- Navbar-->
@@ -201,54 +205,62 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label class="control-label">Product Name</label>
-                                    <input class="form-control" type="text" name="txtProductName" value="<%= pt.getName()%>" />
+                                    <input class="form-control" type="text" id="ProductName" name="txtProductName" value="<%= pt.getName()%>" />
+                                    <small></small>
                                 </div>
                                 <div class="form-group  col-md-3">
                                     <label class="control-label">Quantity</label>
-                                    <input class="form-control" type="number" name="txtQuantity" value="<%= pt.getQuantity()%>" />
+                                    <input class="form-control" type="number" min="0" id="Quantity" name="txtQuantity" value="<%= pt.getQuantity()%>" />
+                                    <small></small>
                                 </div>                                
                                 <div class="form-group col-md-3">
-                                    <label for="exampleSelect1" class="control-label">Category</label>
-                                    <select class="form-control" id="exampleSelect1" name="txtCategory"">
-                                        <option>-- Select Category --</option>
+                                    <label for="pcategory" class="control-label">Category</label>
+                                    <select class="form-control" id="Category" name="txtCategory"">                                       
                                         <option value="0"<%= (pt.getCategory_id() == 0 ? "selected" : "")%> >Shirts</option>
                                         <option value="1"<%= (pt.getCategory_id() == 1 ? "selected" : "")%> >Pants</option>                                           
                                     </select>
+                                    <small></small>
                                 </div>              
                                 <div class="form-group col-md-3">
                                     <label class="control-label">Product Price</label>
-                                    <input class="form-control" type="text" name="txtProductPrice" value="<%= pt.getProduct_price()%>" />
+                                    <input class="form-control" type="number" min="0" id="ProductPrice" name="txtProductPrice" value="<%= pt.getProduct_price()%>" />
+                                    <small></small>
                                 </div> 
                                 <div class="form-group col-md-3">
                                     <label class="control-label">Publish Date</label>
-                                    <input class="form-control" type="text" name="txtDate" value="<%= pt.getPublish_date()%>" />
+                                    <input class="form-control" type="date" name="txtDate" id="PublishDate" value="<%= pt.getPublish_date()%>" />
+                                    <small></small>
                                 </div> 
                                 <div class="form-group col-md-3">
-                                    <label for="exampleSelect1" class="control-label">Size</label>
-                                    <select class="form-control" id="exampleSelect1" name="txtSize">
-                                        <option>-- Select Size --</option>
+                                    <label for="psize" class="control-label">Size</label>
+                                    <select class="form-control" id="Size" name="txtSize">                                       
                                         <option value="S"   <%= (pt.getSize().equals("S") ? "selected" : "")%>>S</option>
                                         <option value="M"   <%= (pt.getSize().equals("M") ? "selected" : "")%>>M</option>                                        
                                         <option value="L"   <%= (pt.getSize().equals("L") ? "selected" : "")%>>L</option>                                        
                                         <option value="XL"  <%= (pt.getSize().equals("XL") ? "selected" : "")%>>XL</option>                                        
                                         <option value="XXL" <%= (pt.getSize().equals("XXL") ? "selected" : "")%>>XXL</option>                                        
                                     </select>
+                                    <small></small>
                                 </div> 
                                 <div class="form-group col-md-3">
-                                    <label for="exampleSelect1" class="control-label">Status</label>
-                                    <select class="form-control" id="exampleSelect1" name="txtStatus">
-                                        <option>-- Select Status --</option>
+                                    <label for="pstatus" class="control-label">Status</label>
+                                    <select class="form-control" id="Status" name="txtStatus">                                 
                                         <option value="0"<%= (pt.getStatus() == 0 ? "selected" : "")%>>Out Of Stock</option>
                                         <option value="1"<%= (pt.getStatus() == 1 ? "selected" : "")%>>On Stock</option>                                        
                                     </select>
+                                    <small></small>
                                 </div>
-                                <div class="form-group col-md-12">
+                                <div class="form-group col-md-12" style="display: flex;">
                                     <label class="control-label">Image</label>                                    
                                     <div id="myfileupload">                                        
-                                        <input type="file" id="uploadfile" name="txtImage" onchange="readURL(this);"/>
+                                        <input type="file" id="UploadImage" name="txtImage" onchange="readURL(this);"/>
+                                        <input type="text" id="oldImg" name="txtImage" value="<%= pt.getImage()%>"/>
+                                        <small style="margin-left: 10px"></small>
                                     </div>
+                                </div>
+                                <div style="margin-left: 15px">
                                     <div id="thumbbox">
-                                        <img height="400" alt="Thumb image" id="thumbimage" src="${pageContext.request.contextPath}/<%= pt.getImage()%>" />
+                                        <img height="450" width="400" alt="Thumb image" id="thumbimage"  src="${pageContext.request.contextPath}/<%= pt.getImage()%>"/>
                                         <a class="removeimg" href="javascript:"></a>
                                     </div>
                                     <div id="boxchoice">
@@ -258,7 +270,8 @@
                                 </div>
                                 <div class="form-group col-md-12">
                                     <label class="control-label">Description</label>
-                                    <textarea class="form-control"  id="mota" name="txtDescription"><%= pt.getDetail_product()%></textarea>                                   
+                                    <textarea class="form-control"  id="Description" name="txtDescription"><%= pt.getDetail_product()%></textarea>   
+                                    <small></small>
                                 </div>
 
                         </div>
@@ -270,33 +283,88 @@
                     <!--
                     MODEL San Pham
                     -->                    
+                    <script>
+                        var status = document.querySelector('#Status');
+                        var product_name = document.querySelector('#ProductName');
+                        var quantity = document.querySelector('#Quantity');
+                        var category = document.querySelector('#Category');
+                        var price = document.querySelector('#ProductPrice');
+                        var date = document.querySelector('#PublishDate');
+                        var size = document.querySelector('#Size');
+                        var image = document.querySelector('#UploadImage');
+                        var description = document.querySelector('#Description');
+                        var form = document.querySelector('form');
+                        var oldImg = document.querySelector('#oldImg');
 
+                        function showError(input, message) {
+                            let parent = input.parentElement;
+                            let small = parent.querySelector('small');
+
+                            parent.classList.add('error');
+                            small.innerText = message;
+                        }
+
+                        function showSuccess(input) {
+                            let parent = input.parentElement;
+                            let small = parent.querySelector('small');
+                            parent.classList.remove('error');
+                            small.innerText = '';
+                        }
+
+                        function getFieldName(input) {
+                            return input.id.charAt(0).toUpperCase() + input.id.slice(1)
+                        }
+
+                        function checkEmptyError(listInput) {
+                            let isEmptyError = false;
+                            listInput.forEach(input => {
+
+                                if ((input.name === 'txtImage' && !oldImg.value && !input.value) || 
+                                    (input.name !== 'txtImage' && !input.value)) {
+                                    isEmptyError = true;
+                                    let error = getFieldName(input) + ' is required';
+                                    showError(input, error);
+                                } else {
+                                    showSuccess(input);
+                                }
+                            });
+                            return isEmptyError;
+                        }
+
+                        form.addEventListener('submit', function (e) {
+                            if (!checkEmptyError([product_name, quantity, category, price, date, size, image, description])) {
+
+                            } else {
+                                e.preventDefault();
+                            }
+
+                        });
+                    </script>
                     <script src="${pageContext.request.contextPath}/js/jquery-3.2.1.min.js"></script>
                     <script src="${pageContext.request.contextPath}/js/popper.min.js"></script>
                     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
                     <script src="${pageContext.request.contextPath}/js/main.js"></script>
                     <script src="${pageContext.request.contextPath}/js/plugins/pace.min.js"></script>
                     <script>
-                                            const inpFile = document.getElementById("inpFile");
-                                            const loadFile = document.getElementById("loadFile");
-                                            const previewContainer = document.getElementById("thumbimage");
-                                            const previewContainer = document.getElementById("thumbimage");
-                                            const previewImage = previewContainer.querySelector(".image-preview__image");
-                                            const previewDefaultText = previewContainer.querySelector(".image-preview__default-text");
-                                            inpFile.addEventListener("change", function () {
-                                                const file = this.files[0];
-                                                if (file) {
-                                                    const reader = new FileReader();
-                                                    previewDefaultText.style.display = "none";
-                                                    previewImage.style.display = "block";
-                                                    reader.addEventListener("load", function () {
-                                                        previewImage.setAttribute("src", this.result);
-                                                    });
-                                                    reader.readAsDataURL(file);
-                                                }
-                                            });
+                        const inpFile = document.getElementById("inpFile");
+                        const loadFile = document.getElementById("loadFile");
+                        const previewContainer = document.getElementById("thumbimage");
+                        const previewContainer = document.getElementById("thumbimage");
+                        const previewImage = previewContainer.querySelector(".image-preview__image");
+                        const previewDefaultText = previewContainer.querySelector(".image-preview__default-text");
+                        inpFile.addEventListener("change", function () {
+                            const file = this.files[0];
+                            if (file) {
+                                const reader = new FileReader();
+                                previewDefaultText.style.display = "none";
+                                previewImage.style.display = "block";
+                                reader.addEventListener("load", function () {
+                                    previewImage.setAttribute("src", this.result);
+                                });
+                                reader.readAsDataURL(file);
+                            }
+                        });
 
                     </script>
                     </body>
-
                     </html>

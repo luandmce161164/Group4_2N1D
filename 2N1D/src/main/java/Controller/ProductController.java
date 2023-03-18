@@ -6,6 +6,7 @@ package Controller;
 
 import DAO.ProductDAO;
 import Models.Product;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,17 +17,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Date;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-
 
 /**
  *
@@ -36,8 +32,7 @@ import java.time.format.DateTimeFormatter;
 public class ProductController extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -79,6 +74,8 @@ public class ProductController extends HttpServlet {
         } else {
             if (path.endsWith("/Admin/Product/Add")) {
                 request.getRequestDispatcher("/form-add-san-pham.jsp").forward(request, response);
+            } else if (path.endsWith("/Admin/Product/AddFile")) {
+                request.getRequestDispatcher("/form-add-san-pham-file.jsp").forward(request, response);
             } else {
                 if (path.startsWith("/Admin/Product/Edit/")) {
                     String[] s = path.split("/");
@@ -99,6 +96,9 @@ public class ProductController extends HttpServlet {
 
                         String id = s[s.length - 1];
                         ProductDAO dao = new ProductDAO();
+                        if (dao.getQuantityByID(id) > 0) {
+
+                        }
                         dao.DeleteProduct(id);
                         response.sendRedirect("/Admin/Product");
                     }
@@ -115,30 +115,31 @@ public class ProductController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override    
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         Part filePart = request.getPart("txtImage");
         String fileName = null;
         String submitImageFileName = filePart.getSubmittedFileName();
-        
+
         if (submitImageFileName != "") {
             InputStream fileContent = filePart.getInputStream();
 
-            //gen format HHmmssddMMyyyy and add to file name
+            //get format HHmmssddMMyyyy and add to file name
             LocalDateTime currentTime = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmmssddMMyyyy");
             String formattedTime = currentTime.format(formatter);
             submitImageFileName = formattedTime + "_" + submitImageFileName;
-            
+
             String filePath = getServletContext().getRealPath("/images/") + File.separator + submitImageFileName;
+            String newFilePath = filePath.replace("\\target\\\\\\Customer_Management-1.0-SNAPSHOT\\\\", "\\src\\main\\webapp\\");
             Files.copy(fileContent, Paths.get(filePath));
-            
+
             fileName = "images/" + submitImageFileName;
         }
-        
-        if (request.getParameter("btnInsert") != null) {            
+
+        if (request.getParameter("btnInsert") != null) {
             String pid = request.getParameter("txtProductID");
             String pname = request.getParameter("txtProductName");
             String quantity = request.getParameter("txtQuantity");
@@ -150,12 +151,29 @@ public class ProductController extends HttpServlet {
             String description = request.getParameter("txtDescription");
             Product pt = new Product(pid, pname, Integer.parseInt(pprice), image, Integer.parseInt(category), Date.valueOf(pdate), 1, description, size, Integer.parseInt(quantity));
             ProductDAO dao = new ProductDAO();
-            int count = dao.AddProduct(pt);
-            if (count > 0) {
-                response.sendRedirect("/Admin/Product");
+            boolean isIdExist = dao.checkProductIdExist(pid);
+            if (isIdExist == true) {
+                request.setAttribute("txtProductID", pid);
+                request.setAttribute("errorMessage", "ProductID is already exist");
+                request.setAttribute("txtProductName", pname);
+                request.setAttribute("txtQuantity", quantity);
+                request.setAttribute("txtCategory", category);
+                request.setAttribute("txtProductPrice", pprice);
+                request.setAttribute("txtDate", pdate);
+                request.setAttribute("txtSize", size);
+                request.setAttribute("txtImage", image);
+                request.setAttribute("txtDescription", description);
+
+                request.getRequestDispatcher("/form-add-san-pham.jsp").forward(request, response);
             } else {
-                response.sendRedirect("/Admin/Product/Add");
+                int count = dao.AddProduct(pt);
+                if (count > 0) {
+                    response.sendRedirect("/Admin/Product");
+                } else {
+                    response.sendRedirect("/Admin/Product/Add");
+                }
             }
+
         }
         if (request.getParameter("btnUpdate") != null) {
             String pid = request.getParameter("txtProductID");

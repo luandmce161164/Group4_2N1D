@@ -77,13 +77,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="tile">
-                        <div class="tile-body">
-                            <div class="row element-button">
-                                <div class="col-sm-2">
-                                    <a class="btn btn-add btn-sm" href="<%= getServletContext().getContextPath()%>/Admin/Order/Add" title="Thêm"><i class="fas fa-plus"></i>
-                                        Add New Order</a>
-                                </div>                            
-                            </div>
+                        <div class="tile-body">                            
                             <table class="table table-hover table-bordered" id="sampleTable">
                                 <thead>
                                     <tr>                    
@@ -109,7 +103,7 @@
                                         <td><%= rs.getString("name")%></td>
                                         <td><%= rs.getString("product_name")%></td>
                                         <td><%= rs.getInt("quantity")%></td>
-                                        <td><%= rs.getInt("order_price")%></td>
+                                        <td><%= String.format("%,d" ,rs.getInt("order_price"))%></td>
                                         <%
                                             if (rs.getInt("status") == 0) {
                                         %>
@@ -239,9 +233,9 @@
             }
             function deleteOrder(control) {
             swal({
-                title: "Cảnh báo",
-                text: "Bạn có chắc chắn là muốn xóa đơn hàng này?",
-                buttons: ["Hủy bỏ", "Đồng ý"]
+                title: "Alert",
+                text: "Are you sure to delete this order?",
+                buttons: ["Cancel", "Accept"]
             })
             .then((willDelete) => {
                 if (willDelete) {

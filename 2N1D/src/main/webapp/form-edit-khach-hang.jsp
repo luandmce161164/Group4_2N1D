@@ -137,6 +137,9 @@
                 transform: rotate(-45deg);
                 margin-top: -2px;
             }
+            small{
+                color: red;
+            }
         </style>
         <!-- Navbar-->
         <header class="app-header">
@@ -198,39 +201,44 @@
                             <form class="row" action="AccountController" method="post">
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Customer ID</label>
-                                    <input class="form-control" type="text" name="txtCustomerID" value="<%= ac.getAccount_id()%>" readonly>
+                                    <input class="form-control" type="text" name="txtCustomerID" id="CustomerID" value="<%= ac.getAccount_id()%>" readonly>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Username</label>
-                                    <input class="form-control" type="text" name="txtUsername" value="<%= ac.getUsername()%>" readonly>
+                                    <input class="form-control" type="text" name="txtUsername" id="Username" value="<%= ac.getUsername()%>" readonly>
                                 </div>                               
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Full Name</label>
-                                    <input class="form-control" type="text" name="txtCustomerName" value="<%= ac.getName()%>">
+                                    <input class="form-control" type="text" name="txtCustomerName" id="FullName" value="<%= ac.getName()%>">
+                                    <small></small>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Date Of Birth</label>
-                                    <input class="form-control" type="text" name="txtCustomerDOB" value="<%= ac.getDate_of_birth()%>">
+                                    <input class="form-control" type="date" name="txtCustomerDOB" id="DateOfBirth" value="<%= ac.getDate_of_birth()%>">
+                                    <small></small>
                                 </div>  
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Email</label>
-                                    <input class="form-control" type="text" name="txtCustomerEmail" value="<%= ac.getEmail()%>">
+                                    <input class="form-control" type="email" name="txtCustomerEmail" id="Email" value="<%= ac.getEmail()%>">
+                                    <small></small>
                                 </div>                                
                                 <div class="form-group  col-md-4">
                                     <label class="control-label">Phone Number</label>
-                                    <input class="form-control" type="text" name="txtCustomerPhoneNumber" value="<%= ac.getPhone_number()%>">
+                                    <input class="form-control" type="text" name="txtCustomerPhoneNumber" id="PhoneNumber" value="<%= ac.getPhone_number()%>">
+                                    <small></small>
                                 </div>
                                 <div class="form-group  col-md-4">
                                     <label class="control-label">Password</label>
-                                    <input class="form-control" type="text" name="txtCustomerPassword" value="<%= ac.getPassword()%>">
+                                    <input class="form-control" type="text" name="txtCustomerPassword" id="Password" value="<%= ac.getPassword()%>">
+                                    <small></small>
                                 </div>                                            
                                 <div class="form-group col-md-3">
-                                    <label class="control-label">Sex</label>
-                                    <select class="form-control" id="exampleSelect2" name="txtCustomerSex">
-                                        <option>-- Select Sex --</option>
+                                    <label class="agender">Sex</label>
+                                    <select class="form-control" id="Gender" name="txtCustomerSex">                                     
                                         <option value="0"<%= (ac.getSex() == 0 ? "selected" : "")%>>Male</option>
                                         <option value="1"<%= (ac.getSex() == 1 ? "selected" : "")%>>Female</option>
                                     </select>
+                                    <small></small>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Status</label>
@@ -246,11 +254,12 @@
                                            <%
                                                }
                                            %>
-                                           >
+                                           >                                    
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Address</label>
-                                    <input class="form-control" type="text" name="txtCustomerAddress" value="<%= ac.getAddress()%>">
+                                    <input class="form-control" type="text" id="Address" name="txtCustomerAddress" value="<%= ac.getAddress()%>">
+                                    <small></small>
                                 </div>
                         </div>
                         <button class="btn btn-save" type="submit" value="submit" name="btnUpdate">Save</button>
@@ -258,7 +267,107 @@
                         </form>
                     </div>
                     </main>
+                    <script>
+                        var customer_id = document.querySelector('#CustomerID');
+                        var usname = document.querySelector('#Username');
+                        var fullname = document.querySelector('#FullName');
+                        var dob = document.querySelector('#DateOfBirth');
+                        var email = document.querySelector('#Email');
+                        var phone = document.querySelector('#PhoneNumber');
+                        var pwd = document.querySelector('#Password');
+                        var gender = document.querySelector('#Gender');
+                        var address = document.querySelector('#Address');
+                        var form = document.querySelector('form');
 
+                        function showError(input, message) {
+                            let parent = input.parentElement;
+                            let small = parent.querySelector('small');
+
+                            parent.classList.add('error');
+                            small.innerText = message;
+                        }
+
+                        function showSuccess(input) {
+                            let parent = input.parentElement;
+                            let small = parent.querySelector('small');
+                            parent.classList.remove('error');
+                            small.innerText = '';
+                        }
+
+                        function getFieldName(input) {
+                            return input.id.charAt(0).toUpperCase() + input.id.slice(1)
+                        }
+
+                        function checkEmptyError(listInput) {
+                            let isEmptyError = false;
+                            listInput.forEach(input => {
+
+                                if (!input.value) {
+                                    isEmptyError = true;
+                                    let error = getFieldName(input) + ' is required';
+                                    showError(input, error);
+                                } else {
+                                    showSuccess(input);
+                                }
+                            });
+                            return isEmptyError;
+                        }
+
+                        function checkEmail(input) {
+                            const regEmail = /^\w+([\.\-_]?\w+)*\@\w+([\.\-_]?\w+)*(\.\w{2,3})+$/;
+                            input.value = input.value.trim();
+
+                            let isEmailError = !regEmail.test(input.value);
+                            if (regEmail.test(input.value)) {
+                                showSuccess(input);
+                            } else {
+                                showError(input, 'Your Email is invalid');
+                            }
+                            return isEmailError;
+                        }
+
+                        function checkPhone(input) {
+                            const regPhone = /^0[1-9]\d{8}$/;
+                            input.value = input.value.trim();
+
+                            let isPhoneError = !regPhone.test(input.value);
+                            if (regPhone.test(input.value)) {
+                                showSuccess(input);
+                            } else {
+                                showError(input, 'Your Phone Number is invalid');
+                            }
+                            return isPhoneError;
+                        }
+
+                        function checkLength(input, min, max) {
+                            input.value = input.value.trim();
+
+                            if (input.value.length < min) {
+                                let error = 'Please enter at least ' + min + ' character';
+                                showError(input, error);
+                                return true;
+                            }
+
+                            if (input.value.length > max) {
+                                let error = 'Please enter at least ' + max + ' character';
+                                showError(input, error);
+                                return true;
+                            }
+
+                            return false;
+                        }
+
+                        form.addEventListener('submit', function (e) {
+                            if (!checkEmptyError([fullname, dob, email, phone, pwd, gender, address])) {                                
+                                checkLength(pwd, 8, 24);
+                                checkEmail(email);
+                                checkPhone(phone);
+                            } else {
+                                e.preventDefault();
+                            }
+
+                        });
+                    </script>
                     <!-- Essential javascripts for application to work-->
                     <script src="${pageContext.request.contextPath}/js/jquery-3.2.1.min.js"></script>
                     <script src="${pageContext.request.contextPath}/js/popper.min.js"></script>

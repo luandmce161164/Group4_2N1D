@@ -85,7 +85,11 @@
 
                                 <a class="btn btn-add btn-sm" href="<%= getServletContext().getContextPath()%>/Admin/Product/Add" title="Thêm"><i class="fas fa-plus"></i>
                                     Add New Product</a>
-                            </div>                                                        
+                            </div>   
+                            <div class="col-sm-2">
+                                <a class="btn btn-delete btn-sm nhap-tu-file" href="<%= getServletContext().getContextPath()%>/Admin/Product/AddFile" title="Nhập"><i
+                                        class="fas fa-file"></i> Add from file</a>
+                            </div>
                         </div>
                         <table class="table table-hover table-bordered" id="sampleTable">
                             <thead>
@@ -112,7 +116,7 @@
                                 <tr>                                        
                                     <td><%= rs.getString("product_id")%></td>
                                     <td><%= rs.getString("product_name")%></td>
-                                    <td><%= rs.getInt("product_price")%></td>                                   
+                                    <td><%= String.format("%,d", rs.getInt("product_price"))%></td>                                   
                                     <td><img src="${pageContext.request.contextPath}/<%= rs.getString("image")%>" alt="" width="100px"></td>                                    
                                     <td><%= rs.getString("category_name")%></td>                                    
                                     <td><%= rs.getDate("publish_date")%></td>
@@ -220,18 +224,18 @@
 
         function deleteProduct(control) {
             swal({
-                title: "Cảnh báo",
-                text: "Bạn có chắc chắn là muốn xóa sản phẩm này?",
-                buttons: ["Hủy bỏ", "Đồng ý"]
+                title: "Alert",
+                text: "Are you sure to delete this product?",
+                buttons: ["Cancel", "Accept"]
             })
-            .then((willDelete) => {
-                if (willDelete) {
-                    var product_id = control.id.split('_')[1];
-                    var urlDelete = window.location.href + "/Delete/" + product_id;
-                    window.location.href = urlDelete;
-                    //swal("Đã xóa thành công.!", {});
-                }
-            });
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            var product_id = control.id.split('_')[1];
+                            var urlDelete = window.location.href + "/Delete/" + product_id;
+                            window.location.href = urlDelete;
+                            //swal("Đã xóa thành công.!", {});
+                        }
+                    });
         }
 
 

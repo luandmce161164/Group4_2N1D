@@ -4,6 +4,10 @@
     Author     : User
 --%>
 
+<%@page import="java.util.Iterator"%>
+<%@page import="java.util.Set"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.sql.Date"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="DAO.ProductDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -105,7 +109,7 @@
                     </div>
                 </div>      
                 <%
-                    int a2 = dao.getTotalIncome();
+                    String a2 = String.format("%,d", dao.getTotalIncome());
                 %>
                 <div class="col-md-6 col-lg-3">
                     <div class="widget-small primary coloured-icon"><i class='icon fa-3x bx bxs-chart' ></i>
@@ -166,7 +170,7 @@
                                         <td><%= rss.getString("product_id")%></td>                                      
                                         <td><%= rss.getString("product_name")%></td>
                                         <td><img src="${pageContext.request.contextPath}/<%= rss.getString("image")%>" alt="" width="100px"></td>
-                                        <td><%= rss.getInt("product_price")%></td> 
+                                        <td><%= String.format("%,d", rss.getInt("product_price"))%></td> 
                                         <td><%= rss.getString("detail_product")%></td> 
                                     </tr> 
                                     <%
@@ -205,7 +209,7 @@
                                         <td><%= rs.getString("name")%></td>
                                         <td><%= rs.getString("product_name")%></td>
                                         <td><%= rs.getInt("quantity")%></td>
-                                        <td><%= rs.getInt("order_price")%></td>                                        
+                                        <td><%= String.format("%,d", rs.getInt("order_price"))%></td>                                        
                                     </tr>    
                                     <%
                                         }
@@ -250,7 +254,7 @@
                                         <td><img src="${pageContext.request.contextPath}/<%= rst.getString("image")%>" alt="" width="100px"></td>
                                         <td><%= rst.getInt("quantity")%></td>                                          
                                         <td><span class="badge bg-danger">Out of Stock</span></td>  
-                                        <td><%= rst.getInt("product_price")%></td> 
+                                        <td><%= String.format("%,d", rst.getInt("product_price"))%></td> 
                                         <td><%= rst.getString("detail_product")%></td> 
                                     </tr>
                                     <%
@@ -261,7 +265,25 @@
                         </div>
                     </div>
                 </div>
-            </div>                
+            </div>              
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Sales statistics by day</h3>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <canvas class="embed-responsive-item" id="lineChartDemo"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Sales statistics by day</h3>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <canvas class="embed-responsive-item" id="barChartDemo"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>            
             <div class="text-right" style="font-size: 12px">
                 <p><b> Code by 2N1D Dev Team </b></p>
             </div>
@@ -276,55 +298,40 @@
         <!-- Page specific javascripts-->
         <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/chart.js"></script>
         <script type="text/javascript">
+            <%
+                Map<Date, Integer> dataSale = dao.getDataSale();
+                Set keys = dataSale.keySet();
+                Iterator i = keys.iterator();
+            %>
         var data = {
-            labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
-            datasets: [{
-                    label: "Dữ liệu đầu tiên",
-                    fillColor: "rgba(255, 255, 255, 0.158)",
-                    strokeColor: "black",
-                    pointColor: "rgb(220, 64, 59)",
-                    pointStrokeColor: "#fff",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "green",
-                    data: [20, 59, 90, 51, 56, 100, 40, 60, 78, 53, 33, 81]
-                },
-                {
-                    label: "Dữ liệu kế tiếp",
-                    fillColor: "rgba(255, 255, 255, 0.158)",
-                    strokeColor: "rgb(220, 64, 59)",
-                    pointColor: "black",
-                    pointStrokeColor: "#fff",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "green",
-                    data: [48, 48, 49, 39, 86, 10, 50, 70, 60, 70, 75, 90]
-                }
-            ]
+            labels: [<% while (i.hasNext()) {%> "<%= i.next()%> ", <% }%>],
+                    datasets: [{
+                            label: "Dữ liệu đầu tiên",
+                            fillColor: "rgba(255, 213, 59, 0.767), 212, 59)",
+                            strokeColor: "rgb(255, 212, 59)",
+                            pointColor: "rgb(255, 212, 59)",
+                            pointStrokeColor: "rgb(255, 212, 59)",
+                            pointHighlightFill: "rgb(255, 212, 59)",
+                            pointHighlightStroke: "rgb(255, 212, 59)",
+                            data: <%= dataSale.values()%>
+                        }
+//                                    {
+//                                        label: "Dữ liệu kế tiếp",
+//                                        fillColor: "rgba(9, 109, 239, 0.651)  ",
+//                                        pointColor: "rgb(9, 109, 239)",
+//                                        strokeColor: "rgb(9, 109, 239)",
+//                                        pointStrokeColor: "rgb(9, 109, 239)",
+//                                        pointHighlightFill: "rgb(9, 109, 239)",
+//                                        pointHighlightStroke: "rgb(9, 109, 239)",
+//                                        data: <%= dataSale.values()%>
+//                                    }
+                    ]
         };
-
-
         var ctxl = $("#lineChartDemo").get(0).getContext("2d");
         var lineChart = new Chart(ctxl).Line(data);
 
         var ctxb = $("#barChartDemo").get(0).getContext("2d");
         var barChart = new Chart(ctxb).Bar(data);
-        </script>
-        <!-- Google analytics script-->
-        <script type="text/javascript">
-            if (document.location.hostname == 'pratikborsadiya.in') {
-                (function (i, s, o, g, r, a, m) {
-                    i['GoogleAnalyticsObject'] = r;
-                    i[r] = i[r] || function () {
-                        (i[r].q = i[r].q || []).push(arguments)
-                    }, i[r].l = 1 * new Date();
-                    a = s.createElement(o),
-                            m = s.getElementsByTagName(o)[0];
-                    a.async = 1;
-                    a.src = g;
-                    m.parentNode.insertBefore(a, m)
-                })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-                ga('create', 'UA-72504830-1', 'auto');
-                ga('send', 'pageview');
-            }
         </script>
         <script type="text/javascript">
             //Thời Gian

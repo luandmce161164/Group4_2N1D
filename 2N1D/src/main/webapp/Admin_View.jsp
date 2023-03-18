@@ -4,6 +4,13 @@
     Author     : User
 --%>
 
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Iterator"%>
+<%@page import="java.util.Set"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.sql.Date"%>
+<%@page import="java.util.List"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="DAO.AccountDAO"%>
 <%@page import="DAO.ProductDAO"%>
@@ -11,7 +18,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title> Admin Management</title>
+        <title>Admin Management</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -160,7 +167,7 @@
                                             <tr>
                                                 <td><%= rs.getInt("order_id")%></td>
                                                 <td><%= rs.getString("name")%></td>
-                                                <td><%= rs.getInt("order_price")%></td>
+                                                <td><%= String.format("%,d" ,rs.getInt("order_price"))%></td>
                                                 <%
                                                     if (rs.getInt("status") == 0) {
                                                 %>
@@ -190,7 +197,47 @@
                                 <!-- / div trống-->
                             </div>
                         </div>
-                        <!-- / col-12 -->            
+                        <!-- / col-12 -->
+                        <!--  col-12 -->
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="tile">
+                                        <h3 class="tile-title">New Customer</h3>
+                                        <div>
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Customer ID</th>
+                                                        <th>Full Name</th>
+                                                        <th>Date Of Birth</th>
+                                                        <th>Phone Number</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <%
+                                                        AccountDAO acdao = new AccountDAO();
+                                                        ResultSet rst = acdao.ListTopAccount();
+                                                        while (rst.next()) {
+                                                    %> 
+                                                    <tr>
+                                                        <td><%= rst.getInt("account_id")%></td>
+                                                        <td><%= rst.getString("name")%></td>
+                                                        <td><%= rst.getDate("date_of_birth")%></td>
+                                                        <td><%= rst.getString("phone_number")%></span></td>
+                                                    </tr>                                            
+                                                    <%
+                                                        }
+                                                    %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>          
+                            </div>
+                        </div>
+                        <!-- / col-12 -->
                     </div>
                 </div>
                 <!--END left-->
@@ -199,44 +246,25 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="tile">
-                                <h3 class="tile-title">New Customer</h3>
-                                <div>
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Customer ID</th>
-                                                <th>Full Name</th>
-                                                <th>Date Of Birth</th>
-                                                <th>Phone Number</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <%
-                                                AccountDAO acdao = new AccountDAO();
-                                                ResultSet rst = acdao.ListTopAccount();
-                                                while (rst.next()) {
-                                            %> 
-                                            <tr>
-                                                <td><%= rst.getInt("account_id")%></td>
-                                                <td><%= rst.getString("name")%></td>
-                                                <td><%= rst.getDate("date_of_birth")%></td>
-                                                <td><%= rst.getString("phone_number")%></span></td>
-                                            </tr>                                            
-                                            <%
-                                                }
-                                            %>
-                                        </tbody>
-                                    </table>
+                                <h3 class="tile-title">Sales statistics by day</h3>
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <canvas class="embed-responsive-item" id="lineChartDemo"></canvas>
                                 </div>
-
                             </div>
-                        </div>          
+                        </div>
+                        <div class="col-md-12">
+                            <div class="tile">
+                                <h3 class="tile-title">Sales statistics by day</h3>
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <canvas class="embed-responsive-item" id="barChartDemo"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                
                 <!--END right-->
             </div>
-
-
             <div class="text-center" style="font-size: 13px">
                 <p><b>
                         <script type="text/javascript">
@@ -259,8 +287,14 @@
         <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/chart.js"></script>
         <!--===============================================================================================-->
         <script type="text/javascript">
+            
+                            <%
+                                Map<Date, Integer> dataSale = dao.getDataSaleView();
+                                Set keys = dataSale.keySet();
+                                Iterator i = keys.iterator();
+                            %> 
                             var data = {
-                                labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
+                                labels: [<% while (i.hasNext()) { %> "<%= i.next() %> ", <% } %>].reverse(),
                                 datasets: [{
                                         label: "Dữ liệu đầu tiên",
                                         fillColor: "rgba(255, 213, 59, 0.767), 212, 59)",
@@ -269,18 +303,18 @@
                                         pointStrokeColor: "rgb(255, 212, 59)",
                                         pointHighlightFill: "rgb(255, 212, 59)",
                                         pointHighlightStroke: "rgb(255, 212, 59)",
-                                        data: [20, 59, 90, 51, 56, 100]
-                                    },
-                                    {
-                                        label: "Dữ liệu kế tiếp",
-                                        fillColor: "rgba(9, 109, 239, 0.651)  ",
-                                        pointColor: "rgb(9, 109, 239)",
-                                        strokeColor: "rgb(9, 109, 239)",
-                                        pointStrokeColor: "rgb(9, 109, 239)",
-                                        pointHighlightFill: "rgb(9, 109, 239)",
-                                        pointHighlightStroke: "rgb(9, 109, 239)",
-                                        data: [48, 48, 49, 39, 86, 10]
+                                        data: <%= dataSale.values() %>.reverse()
                                     }
+//                                    {
+//                                        label: "Dữ liệu kế tiếp",
+//                                        fillColor: "rgba(9, 109, 239, 0.651)  ",
+//                                        pointColor: "rgb(9, 109, 239)",
+//                                        strokeColor: "rgb(9, 109, 239)",
+//                                        pointStrokeColor: "rgb(9, 109, 239)",
+//                                        pointHighlightFill: "rgb(9, 109, 239)",
+//                                        pointHighlightStroke: "rgb(9, 109, 239)",
+//                                        data: <%= dataSale.values() %>
+//                                    }
                                 ]
                             };
                             var ctxl = $("#lineChartDemo").get(0).getContext("2d");

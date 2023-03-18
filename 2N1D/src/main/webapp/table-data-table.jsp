@@ -259,9 +259,9 @@
         }
         function deleteAccount(control) {
             swal({
-                title: "Cảnh báo",
-                text: "Bạn có chắc chắn là muốn xóa khách hàng này?",
-                buttons: ["Hủy bỏ", "Đồng ý"]
+                title: "Alert",
+                text: "Are you sure to delete this account?",
+                buttons: ["Cancel", "Accept"]
             })
             .then((willDelete) => {
                 if (willDelete) {
